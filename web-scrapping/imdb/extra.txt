@@ -1,0 +1,29 @@
+#movie_list=soup.find_all("td","result_text")
+#movie=movie_list[0].find("a").string
+#print ("Movie Name :",movie)
+#article=soup.find("div",{ "id" : "titleCast" })
+#link_div=article.find("div","see-more")
+#cast_link=link_div.find("a").get("href")
+#print(cast_link)
+driver = webdriver.Chrome()
+driver.get(review_link)
+button = driver.find_element_by_id('buttonID')
+button.click()
+
+if movies in f:
+    print("Already there")
+    f.close()
+else:
+    f=open("movies.json","a")
+    f.write(x)
+    f.close()
+    print("Write successfull")
+    
+
+
+{"tt0482571": {"imdb_id": "tt0482571", "movie_name": "The Prestige", "imdb_link": "http://www.imdb.com/title/tt0482571/", "genres": ["Drama", "Mystery", "Sci-Fi"], "rating_bar": 8.5, "no_of_user_rated": 1012078, "reviews": [" Fantastic.", " A Stylish, Uniquely Twisted Period Piece", " Are you watching closely?", " Storytelling at its best!", " This movie fills the screen and your mind.", " A Nutshell Review: The Prestige", " Outstanding acting performances worth price of admission", " Prestigious", " Webby meshwork of magic and mystery", " Amazing! twist after twist!", " One of the best movies EVER", " Just As Intriguing The Second Time, Too!", " This was an amazing movie!", " Magical!!!", " Are you serious?", " Great movie, ruined by the \"ending\"", " I love long, dark, well-acted and intelligent films but not this one", " An insult to the intelligence (Possible Spoilers)", " Masterfully Handled!!!", " I'm addicted to it", " Stop Rating Christopher Nolan Movies a 10!", " Formulaic, contrived, predictable", " No magic, just cheating", " Now you see it ... Now you wish you hadn't", " Misdirection is one thing; this is another"]}, "tt0120338": {"imdb_id": "tt0120338", "movie_name": "Titanic", "imdb_link": "http://www.imdb.com/title/tt0120338/", "genres": ["Drama", "Romance"], "rating_bar": 7.8, "no_of_user_rated": 907614, "reviews": [" Timeless, moving, and epic", " Actually it got better for me", " bravo", " One of a Kind", " A Superb Epic", " Amazing", " Haunting, Powerfully Resonant And Visually Stunning", " If this movie is \"over-hyped\" we only have the public to blame....", " Triumph in Tradgedy: Titanic", " One for the Ages", " A film with a heart that focuses on two lovers, and sees the disaster through their eyes...", " Despite some glaring faults,Cameron's mixing of romance with real life disaster is still impressive and occasionally brilliant", " Still stands out as the GREATEST film ever made.", " Despite a lot of plot flaws and conveniences, this really is one of the best films ever made.", " It's a crying freaking shame", " Never seen anything better", " Come on, admit it. This is a great film!", " This was one of the few movies that actually brought me to tears.", " The triumph of contemporary tripe", " A tragic historical incident, dumbed down in order to empty pockets of the MTV generation in the name of popular culture.(Spoilers)", " The Sinking Of Standards", " Titanic--Disaster of Dreams", " Oi, Cameron. No.", " Years from now, people will look back and wonder why."]}, "tt3767372": {"imdb_id": "tt3767372", "movie_name": "Piku", "imdb_link": "http://www.imdb.com/title/tt3767372/", "genres": ["Comedy", "Drama"], "rating_bar": 7.6, "no_of_user_rated": 22849, "reviews": [" Simplicity Redefined.", " Piku is not a movie to be seen.. it's a movie to be experienced.. :)", " Emotional and Entertaining", " A Sweet & Simple Film...", " Shoojit Sircar's film for your body and your soul. Amitabh's best in years. Masterfully done.", " Definitely one of the best movies this year so far!", " As delicious as Bengali Rasogulla", " Tree is important, its shadow is just the beautiful outcome.", " A refreshing film", " Vanilla Bollywood Icing on a Cake of Legendary Bollywood Culture", " Feel Good Movie Of The Year. \u2666 74%", " A comical, heartfelt tale of an ageing father and his accommodating daughter", " An Uttur waste of 3hrs of my life on an precious Sunday, Plz Don't See this Crap The Rating are all Scam", " What was this movie about?", " piku is a full \"PAKKAUU\"", " SHITTYYYYY Movie!!!", " You will enjoy if you like constipation PJ's", " Piku - An awful way to explain relationships.", " Don't know about constipation but it cured me of insomnia!", " It is about human excreta", " Serious Crap", " Watch the movie to know how a father shouldn't be with his daughter", " Piku : An atrociously horrible 'Hindi' film about constipation !!!!", " Piku - The Story of Constipation", " Here Comes The Best Movie Of The Year Till Now"]}}
+
+
+
+
+                    
