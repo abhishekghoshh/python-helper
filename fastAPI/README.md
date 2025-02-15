@@ -1,7 +1,11 @@
 # FastAPI learning materials
 
+## Blogs
+- [Tutorial - User Guide](https://fastapi.tiangolo.com/tutorial/)
+- [Request Body](https://fastapi.tiangolo.com/tutorial/body/)
+- [How to Use FastAPI APIRouters](https://apidog.com/articles/how-to-use-fastapi-apirouter/)
+- [APIRouter](https://fastapi.tiangolo.com/reference/apirouter/)
+- [Dependencies](https://fastapi.tiangolo.com/tutorial/dependencies/)
 
 
-## Youtube videos:
-- [FastAPI Tutorial in Hindi | Lets build a Notes app using FastAPI, MongoDB & Bootstrap](https://www.youtube.com/watch?v=52c7Kxp_14E)
-- [API integration Course – Modern Python with FastAPI](https://www.youtube.com/watch?v=rkPIftzu1pQ)
+## Youtube:
