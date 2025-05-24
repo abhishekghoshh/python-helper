@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongo
+      - rabbitmq
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/users
+      - RABBITMQ_URL=amqp://rabbitmq
+
+  worker:
+    build: .
+    command: celery -A celery_worker worker --loglevel=info
+    depends_on:
+      - rabbitmq
+      - mongo
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/users
+      - RABBITMQ_URL=amqp://rabbitmq
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+
+  rabbitmq:
+    image: rabbitmq:latest
+    ports:
+      - "5672:5672"
+      - "15672:15672"

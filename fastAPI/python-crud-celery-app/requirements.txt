@@ -1,0 +1,7 @@
+Flask
+pymongo
+celery
+rabbitmq
+redis
+flask-cors
+dnspython
