@@ -9,11 +9,12 @@
 - [Dependencies](https://fastapi.tiangolo.com/tutorial/dependencies/)
 
 
-## Youtube:
+## Youtube
 
 ### Single Videos
 
 - [You're Probably Building FASTAPI Apps WRONG (Clean Architecture)](https://www.youtube.com/watch?v=H9Blu0kWdZE)
+- [Anatomy of a Scalable Python Project (FastAPI)](https://www.youtube.com/watch?v=Af6Zr0tNNdE)
 
 
 ### Playlists
