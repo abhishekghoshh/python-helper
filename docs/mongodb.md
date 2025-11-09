@@ -1,19 +1,6 @@
-# Python Helper
+# Python with mongodb
 
-
-## Youtube 
-
-### Single videos
-
-- [Goodbye async/await](https://www.youtube.com/watch?v=eMyns10LzJs)
-
-
-### Channels
-
-- [pixegami](https://www.youtube.com/@pixegami/playlists)
-
-
-### MongoDB
+## Blogs and Websites
 
 - [pymongo](https://pymongo.readthedocs.io/en/stable/tutorial.html)
 - [Async Tutorial](https://pymongo.readthedocs.io/en/stable/async-tutorial.html)
