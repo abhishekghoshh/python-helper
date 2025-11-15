@@ -1,0 +1,42 @@
+# --- Default values for prime-api chart ---
+
+# The application image
+image:
+  repository: abhishek1009/prime-calculator
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+# API Deployment
+api:
+  replicaCount: 1
+  service:
+    type: NodePort # Use LoadBalancer for external access, or NodePort
+    port: 8000 # External port
+    targetPort: 8000 # Internal FastAPI port
+
+# Worker Deployment
+worker:
+  replicaCount: 1
+
+# Redis Deployment (Custom, not a sub-chart)
+redis:
+  image: redis:7-alpine
+  port: 6379
+  
+  # Configuration for the custom PV/PVC
+  # This uses hostPath, which is for dev/testing only!
+  # It requires you to create the directory on your K8s node.
+  pv:
+    name: "prime-api-redis-pv"
+    hostPath: /mnt/data/redis # <-- DEV ONLY. Dir must exist on the node.
+    storage: 1Gi
+  
+  pvc:
+    name: "prime-api-redis-pvc"
+    storageClassName: "standard" # We link the PV and PVC with this name
+    storage: 1Gi
+
+# Global service settings
+serviceAccount:
+  create: false
+  name: ""

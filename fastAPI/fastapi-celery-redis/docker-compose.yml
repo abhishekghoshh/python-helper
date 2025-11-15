@@ -1,0 +1,161 @@
+services:
+  # 1. The Redis Message Broker
+  redis:
+    image: redis:latest
+    container_name: redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - worker-network
+
+  redisinsight:
+    image: redislabs/redisinsight:latest
+    container_name: redis-insight
+    restart: unless-stopped
+    ports:
+      - "5540:5540"
+    volumes:
+      - redisinsight-data:/db
+    networks:
+      - worker-network
+    depends_on:
+      - redis
+
+
+  # 2. The FastAPI Application (Web Server)
+  prime-calculator-api:
+    container_name: prime-calculator-api
+    image: abhishek1009/prime-calculator-api:latest
+    build: .
+    volumes:
+      - ./src:/src
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    networks:
+      - worker-network
+
+  # 3. The Celery Worker
+  prime-calculator-worker:
+    container_name: prime-calculator-worker
+    image: abhishek1009/prime-calculator-worker:latest
+    build: .
+    command: etc/worker/run.sh
+    volumes:
+      - ./src:/src
+    depends_on:
+      - redis
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    networks:
+      - worker-network
+  sonardb:
+    image: postgres:15
+    container_name: prime_app_sonardb
+    environment:
+      - POSTGRES_USER=sonar
+      - POSTGRES_PASSWORD=sonar
+      - POSTGRES_DB=sonarqube
+    volumes:
+      - sonardb_data:/var/lib/postgresql/data
+    networks:
+      - worker-network
+    
+  # 5. SonarQube Server
+  sonarqube:
+    image: sonarqube:latest
+    container_name: prime_app_sonarqube
+    ports:
+      - "9000:9000" # SonarQube UI
+    depends_on:
+      - sonardb
+    environment:
+      - SONAR_JDBC_URL=jdbc:postgresql://sonardb:5432/sonarqube
+      - SONAR_JDBC_USERNAME=sonar
+      - SONAR_JDBC_PASSWORD=sonar
+    volumes:
+      - sonarqube_extensions:/opt/sonarqube/extensions
+      - sonarqube_logs:/opt/sonarqube/logs
+    healthcheck: # <-- NEW: Waits for SonarQube to be fully ready
+      test: ["CMD", "curl", "-f", "http://localhost:9000/api/system/status"]
+      interval: 15s
+      timeout: 10s
+      retries: 30
+    networks:
+      - worker-network
+
+  # 6. NEW: The SonarQube Scanner Service
+  # This is a one-off "task" container, not a long-running service.
+  sonar-scanner:
+    image: sonarsource/sonar-scanner-cli
+    container_name: prime_app_scanner
+    volumes:
+      - .:/usr/src  # Mount your code to be scanned
+    depends_on:
+      sonarqube: # <-- NEW: Waits for the healthcheck to pass
+        condition: service_healthy
+      trivy-scanner: # <-- NEW: Waits for Trivy to finish
+        condition: service_completed_successfully 
+    environment:
+      - SONAR_HOST_URL=http://sonarqube:9000
+      - SONAR_TOKEN=${SONAR_LOGIN_TOKEN} # <-- NEW: Reads from .env file
+      - SONAR_PROJECT_KEY=${SONAR_PROJECT_KEY}
+      - scan-reports:/reports
+      - WORKING_DIR=/usr/src
+    working_dir: /usr/src
+    command: sh etc/sonar/scan.sh
+    networks:
+      - worker-network
+  trivy-scanner:
+    image: alpine:latest
+    container_name: prime_app_trivy
+    volumes:
+      # Mount the Docker socket to let Trivy scan host images
+      - /var/run/docker.sock:/var/run/docker.sock
+      # Mount your project's code for Helm/config scanning
+      - .:/usr/src
+      - scan-reports:/reports # Shared volume for reports
+    environment:
+      - SONAR_HOST_URL=http://sonarqube:9000
+      - SONAR_TOKEN=${SONAR_LOGIN_TOKEN} # <-- NEW: Reads from .env file
+      - SONAR_PROJECT_KEY=${SONAR_PROJECT_KEY}
+      - SONAR_SCANNER_VERSION=5.0.1.3006
+      - TRIVY_VERSION=0.51.1
+      - DOCKER_IMAGE_NAME=abhishek1009/prime-calculator-api:latest
+      - WORKING_DIR=/usr/src
+      - HELM_CHART_PATH=./helm
+    working_dir: /usr/src
+    # An infinite command to keep the container "runnable"
+    # The real commands will be passed by 'docker-compose run'
+    command: sh etc/trivy/scan.sh
+    depends_on:
+      sonarqube: # Waits for SonarQube to be healthy
+        condition: service_healthy
+    networks:
+      - worker-network
+
+volumes:
+  redis-data:
+    driver: local
+  redisinsight-data:
+    driver: local
+  sonardb_data:
+    driver: local
+  sonarqube_extensions: 
+    driver: local
+  sonarqube_logs: 
+    driver: local
+  scan-reports:
+    driver: local
+
+networks:
+  worker-network:
+    driver: bridge

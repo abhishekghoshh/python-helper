@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "prime-api.fullname" . }}-api
+  labels:
+    app: api
+    {{- include "prime-api.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.api.replicaCount }}
+  selector:
+    matchLabels:
+      app: api
+      {{- include "prime-api.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: api
+        {{- include "prime-api.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - name: api
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        # Note: No --reload in production
+        command: ["/bin/bash", "./etc/api/run.sh"]
+        ports:
+        - containerPort: {{ .Values.api.service.targetPort }}
+        env:
+        - name: CELERY_BROKER_URL
+          value: "redis://{{ include "prime-api.fullname" . }}-redis:{{ .Values.redis.port }}/0"
+        - name: CELERY_RESULT_BACKEND
+          value: "redis://{{ include "prime-api.fullname" . }}-redis:{{ .Values.redis.port }}/0"

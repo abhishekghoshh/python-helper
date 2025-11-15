@@ -1,0 +1,24 @@
+[project]
+name = "fastapi-celery-redis"
+version = "0.1.0"
+description = "A FastAPI project integrated with Celery and Redis for asynchronous task processing."
+authors = [
+    {name = "Abhishek Ghosh",email = "ghoshabhishek1640@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi>=0.121.2",
+    "uvicorn>=0.38.0",
+    "celery>=5.5.3",
+    "redis>=7.0.1",
+    "pydantic>=2.12.4"
+]
+
+[tool.poetry]
+packages = [{include = "fastapi_celery_redis", from = "src"}]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
