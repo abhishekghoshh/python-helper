@@ -24,7 +24,7 @@ chmod +x /usr/local/bin/trivy
 export PATH="$PATH:/opt/sonar-scanner/bin"
 
 # Move to the project root
-cd ${WORKING_DIR}
+cd ${PROJECT_DIR}
 
 # --- 4. Scan Docker Image (Output to Console) ---
 # We scan this for visibility. It CANNOT be uploaded to SonarQube.
@@ -45,6 +45,6 @@ echo "Scanning filesystem for dependencies..."
 trivy fs \
     --format sarif \
     --output /reports/trivy-fs.sarif \
-    ${WORKING_DIR}
+    ${PROJECT_DIR}
 
 echo "Trivy file scans complete. Reports saved."
