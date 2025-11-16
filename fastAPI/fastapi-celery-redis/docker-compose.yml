@@ -98,26 +98,30 @@ services:
     image: sonarsource/sonar-scanner-cli
     container_name: prime_app_scanner
     volumes:
-      - .:/usr/src  # Mount your code to be scanned
-      - trivy-reports:/reports # Shared volume for reports
+      - .:/usr/src:ro  # Mount your code to be scanned
+      - trivy-reports:/reports:rw # Shared volume for reports
+      - sonar_scanner:/sonar-scanner-data # Persistent data for Sonar Scanner
     depends_on:
       sonarqube: # <-- NEW: Waits for the healthcheck to pass
         condition: service_healthy
-      trivy-scanner: # <-- NEW: Waits for Trivy to finish
-        condition: service_completed_successfully
+      trivy-scanner:
+        condition: service_started
     environment:
       - SONAR_HOST_URL=http://sonarqube:9000
       - SONAR_TOKEN=${SONAR_LOGIN_TOKEN} # <-- NEW: Reads from .env file
       - SONAR_PROJECT_KEY=${SONAR_PROJECT_KEY}
       - PROJECT_DIR=/usr/src
-      - WORKING_DIR=/reports
-    working_dir: /reports
-    command: sh etc/sonar/scan.sh
+      - WORKING_DIR=/sonar-scanner-data
+    user: root
+    working_dir: /sonar-scanner-data
+    command: sh /usr/src/etc/sonar/scan.sh
     networks:
       - worker-network
   trivy-scanner:
     image: alpine:latest
     container_name: prime_app_trivy
+    ports:
+      - "8080:80" # Expose Nginx on port 8080
     volumes:
       # Mount the Docker socket to let Trivy scan host images
       - /var/run/docker.sock:/var/run/docker.sock
@@ -128,19 +132,13 @@ services:
       - SONAR_HOST_URL=http://sonarqube:9000
       - SONAR_TOKEN=${SONAR_LOGIN_TOKEN} # <-- NEW: Reads from .env file
       - SONAR_PROJECT_KEY=${SONAR_PROJECT_KEY}
-      - SONAR_SCANNER_VERSION=5.0.1.3006
-      - TRIVY_VERSION=0.51.1
+      - TRIVY_VERSION=0.67.2
       - DOCKER_IMAGE_NAME=abhishek1009/prime-calculator-api:latest
       - PROJECT_DIR=/usr/src
       - WORKING_DIR=/reports
-      - HELM_CHART_PATH=./helm
+      - HELM_CHART_PATH=/usr/src/helm
     working_dir: /reports
-    # An infinite command to keep the container "runnable"
-    # The real commands will be passed by 'docker-compose run'
-    command: sh etc/trivy/scan.sh
-    depends_on:
-      sonarqube: # Waits for SonarQube to be healthy
-        condition: service_healthy
+    command: sh /usr/src/etc/trivy/scan.sh
     networks:
       - worker-network
 
@@ -154,6 +152,8 @@ volumes:
   sonarqube_extensions: 
     driver: local
   sonarqube_logs: 
+    driver: local
+  sonar_scanner:
     driver: local
   trivy-reports:
     driver: local
