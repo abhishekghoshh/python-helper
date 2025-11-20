@@ -52,4 +52,10 @@
 
 - [Tech With Tim](https://www.youtube.com/@TechWithTim)
 
+- [CodeWithHarry](https://www.youtube.com/@CodeWithHarry/playlists)
+  - [Python Crash Course in Hindi | 5 Python Projects | Complete Python Tutorial](https://www.youtube.com/watch?v=fqF9M92jzUo)
+  - 
+  - [Python Tutorial For Beginners In Hindi (With Notes) 🔥](https://www.youtube.com/watch?v=gfDE2a7MKjA)
+  - [Python Programming Course in Hindi (Advanced) 🔥](https://www.youtube.com/watch?v=61a7UkDO50s)
+
 - [Python Programming Tutorials (Computer Science)](https://www.youtube.com/playlist?list=PLi01XoE8jYohWFPpC17Z-wWhPOSuh8Er-)

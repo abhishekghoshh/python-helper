@@ -1,0 +1,13 @@
+FROM abhishek1009/ubuntu:latest
+
+LABEL maintainer="Abhishek Ghosh <ghoshabhishek1640@gmail.com>"
+
+RUN apt-get update && apt-get install -y \
+    python3.14 \
+    python3-pip \
+    python3.14-venv \
+    jupyter-notebook \
+    && rm -rf /var/lib/apt/lists/*
+
+EXPOSE 8888
+EXPOSE 8080
