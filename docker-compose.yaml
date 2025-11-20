@@ -10,7 +10,7 @@ services:
     command: start-notebook.sh --NotebookApp.token=''
   python-sandbox:
     image: abhishek1009/python:latest
-    container_name: python_sandbox
+    container_name: python-sandbox
     build:
       context: .
       dockerfile: Dockerfile.python
