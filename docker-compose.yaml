@@ -1,22 +1,22 @@
 services:
   jupyter:
-    image: jupyter/scipy-notebook:latest
+    image: abhishek1009/python:latest
     container_name: jupyter_notebook
     ports:
       - "8888:8888"
     volumes:
       - ./basics:/workspace/src
     working_dir: /workspace/src
-    command: start-notebook.sh --NotebookApp.token=''
-  python-sandbox:
-    image: abhishek1009/python:latest
-    container_name: python-sandbox
-    build:
-      context: .
-      dockerfile: Dockerfile.python
-    ports:
-      - "5000:5000"
-    volumes:
-      - .:/workspace/python-helper
-    working_dir: /workspace/python-helper
-    command: tail -f /dev/null
+    command: jupyter-notebook --ip=0.0.0.0 --allow-root --NotebookApp.token=''
+  # python-sandbox:
+  #   image: abhishek1009/python:latest
+  #   container_name: python-sandbox
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.python
+  #   ports:
+  #     - "5000:5000"
+  #   volumes:
+  #     - .:/workspace/python-helper
+  #   working_dir: /workspace/python-helper
+  #   command: tail -f /dev/null
