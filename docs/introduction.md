@@ -15,6 +15,7 @@
 - [This Is Why Your Python Code Feels Off (And How to Fix It)](https://www.youtube.com/watch?v=bsU7AFjh4m8)
 - [Learning Python Feels Easy. Until It Isn't.](https://www.youtube.com/watch?v=8_Pf4y5yqCE)
 - [8 things in Python you didn't realize are descriptors](https://www.youtube.com/watch?v=mMbVs17Vmo4)
+- [Stop Hardcoding Everything: Use Dependency Injection](https://www.youtube.com/watch?v=Xhzn1eAxoXk)
 
 
 ### Python Interpreter

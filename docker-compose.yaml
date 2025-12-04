@@ -8,15 +8,21 @@ services:
       - ./basics:/workspace/src
     working_dir: /workspace/src
     command: jupyter-notebook --ip=0.0.0.0 --allow-root --NotebookApp.token=''
-  # python-sandbox:
-  #   image: abhishek1009/python:latest
-  #   container_name: python-sandbox
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile.python
-  #   ports:
-  #     - "5000:5000"
-  #   volumes:
-  #     - .:/workspace/python-helper
-  #   working_dir: /workspace/python-helper
-  #   command: tail -f /dev/null
+  postgres:
+    image: postgres:latest
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mydatabase
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+
+
+
+
+volumes:
+  pgdata:
