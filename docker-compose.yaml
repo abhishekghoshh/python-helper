@@ -1,28 +1,149 @@
 services:
-  jupyter:
-    image: abhishek1009/python:latest
+  notebook:
+    image: jupyter/scipy-notebook:latest
     container_name: jupyter_notebook
     ports:
       - "8888:8888"
     volumes:
-      - ./basics:/workspace/src
-    working_dir: /workspace/src
-    command: jupyter-notebook --ip=0.0.0.0 --allow-root --NotebookApp.token=''
+      - ./notebooks:/workspace/python-helper/notebooks
+    working_dir: /workspace/python-helper/notebooks
+    command: >
+      sh -c "pip install -r /workspace/python-helper/notebooks/requirements.txt &&
+             jupyter-notebook --ip=0.0.0.0 --allow-root --NotebookApp.token=''"
+    # env for postgres connection
+    environment:
+      # --- Postgres Connection Info ---
+      POSTGRES_HOST: postgres
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      
+      # --- Redis Connection Info ---
+      REDIS_HOST: redis
+      REDIS_USER: ${REDIS_USER}    # Matches the user created in the redis command below
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      
+      # --- Mongo Connection Info ---
+      MONGO_HOST: mongo
+      MONGO_USER: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+
   postgres:
-    image: postgres:latest
+    image: postgres:18
     container_name: postgres_db
     environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: mydatabase
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
     ports:
       - "5432:5432"
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/18/data
+    deploy:
+      replicas: ${POSTGRES_REPLICAS:-0}
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin4_container
+    restart: always
+    ports:
+      - "8889:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    depends_on:
+      - postgres
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    deploy:
+      replicas: ${POSTGRES_REPLICAS:-0}
+  sqlitebrowser:
+    image: lscr.io/linuxserver/sqlitebrowser:latest
+    container_name: sqlitebrowser
+    ports:
+      - "8088:8080"
+      - "3300:3000"
+      - "3001:3001"
+    environment:
+      # Set your User ID (usually 1000)
+      - PUID=1000
+      # Set your Group ID (usually 1000)
+      - PGID=1000
+      # Set your desired timezone
+      - TZ=America/New_York
+    volumes:
+      # Map a local directory to the container's config path
+      - sqlite-data:/config
+    deploy:
+      replicas: ${SQLITE_REPLICAS:-0}
+  redis:
+    image: redis:latest
+    container_name: redis_cache
+    ports:
+      - "6379:6379"
+    # Redis does not use ENV vars for users. We use the command line to set ACLs.
+    # 1. --requirepass: Sets password for the 'default' user.
+    # 2. --user: Creates a named user 'redisuser' with password 'password' and full permissions (+@all).
+    # command: >
+    #   redis-server 
+    #   --requirepass password
+    #   --user redisuser on >password +@all
+    volumes:
+      - redisdata:/data
+    deploy:
+      replicas: ${REDIS_REPLICAS:-0}
+  redisinsight:
+    image: redislabs/redisinsight:latest
+    container_name: redis-insight
+    ports:
+      - "5540:5540"
+    volumes:
+      - redisinsight-data:/db
+    depends_on:
+      - redis
+    deploy:
+      replicas: ${REDIS_REPLICAS:-0}
 
-
-
-
+  mongo:
+    image: mongo:latest
+    container_name: mongo_db
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    volumes:
+      - ./db/mongo/init.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+      - mongo-data:/data/db
+      - mongodb-log:/var/log/mongodb/
+    command:
+      - --storageEngine
+      - wiredTiger
+      - --auth
+    deploy:
+      replicas: ${MONGO_REPLICAS:-0}
+  mongo-express:
+    image: mongo-express:latest
+    container_name: mongo-express
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      ME_CONFIG_MONGODB_PORT: 27017
+      ME_CONFIG_MONGODB_SERVER: mongo
+      ME_CONFIG_BASICAUTH_USERNAME: ${MONGO_EXPRESS_USERNAME}
+      ME_CONFIG_BASICAUTH_PASSWORD: ${MONGO_EXPRESS_PASSWORD}
+    depends_on:
+      - mongo
+    deploy:
+      replicas: ${MONGO_REPLICAS:-0}
+    
 
 volumes:
   pgdata:
+  redisdata:
+  mongo-data:
+  mongodb-log:
+  pgadmin-data:
+  redisinsight-data:
+  sqlite-data:
