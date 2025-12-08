@@ -26,12 +26,13 @@
 
 - [Learn Fast API With This ONE Project](https://www.youtube.com/watch?v=SR5NYCdzKkc)
   - [techwithtim/FastAPIPhotoVideoSharing](https://github.com/techwithtim/FastAPIPhotoVideoSharing)
+- [FastAPI SQLAlchemy Tutorial 2025 — Build a REST API with SQL](https://www.youtube.com/watch?v=xq1Snezb1rs)
 - [FastAPI Tutorial in Hindi | Lets build a Notes app using FastAPI, MongoDB & Bootstrap 🔥](https://www.youtube.com/watch?v=52c7Kxp_14E)
 - [FastAPI for Beginners - Python Web Framework](https://www.youtube.com/watch?v=Lu8lXXlstvM)
 - [FastAPI Tutorial for Beginners - Full Course (2025)](https://www.youtube.com/watch?v=VirndPTeRaw)
 - [Fast API Crash Course Code-along | Build an app with Postgres, SQL Alchemy, Async, and more](https://www.youtube.com/watch?v=gQTRsZpR7Gw)
 - [FastAPI - A python framework | Full Course](https://www.youtube.com/watch?v=7t2alSnE2-I)
-- [FastAPI SQLAlchemy Tutorial 2025 — Build a REST API with SQL](https://www.youtube.com/watch?v=xq1Snezb1rs)
+
 
 - [FastAPI Beyond CRUD Full Course - A FastAPI Course](https://www.youtube.com/watch?v=TO4aQ3ghFOc)
 - [Python FastAPI Playlist + testing + deployment + CI/CD](https://www.youtube.com/playlist?list=PL8VzFQ8k4U1L5QpSapVEzoSfob-4CR8zM)
