@@ -1,2 +1,6 @@
+mysql-connector-python
+psycopg2-binary
+sqlalchemy
+python-dotenv
 redis
 pymongo

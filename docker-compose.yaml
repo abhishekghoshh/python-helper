@@ -10,8 +10,14 @@ services:
     command: >
       sh -c "pip install -r /workspace/python-helper/notebooks/requirements.txt &&
              jupyter-notebook --ip=0.0.0.0 --allow-root --NotebookApp.token=''"
-    # env for postgres connection
+
     environment:
+      # --- MySQL Connection Info ---
+      MYSQL_HOST: mysql
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DB: ${MYSQL_DATABASE}
       # --- Postgres Connection Info ---
       POSTGRES_HOST: postgres
       POSTGRES_USER: ${POSTGRES_USER}
@@ -28,6 +34,39 @@ services:
       MONGO_USER: ${MONGO_INITDB_ROOT_USERNAME}
       MONGO_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
 
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_db
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./db/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - mysql-data:/var/lib/mysql
+    deploy:
+      replicas: ${MYSQL_REPLICAS:-0}
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin_container
+    restart: always
+    depends_on:
+      - mysql
+    ports:
+      - "8085:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_USER: ${MYSQL_USER}
+      PMA_PASSWORD: ${MYSQL_PASSWORD}
+
+      PMA_ARBITRARY: 1    # Allows you to type in a custom server address if needed
+      UPLOAD_LIMIT: 300M  # Increases upload limit for large SQL dumps
+    deploy:
+      replicas: ${MYSQL_REPLICAS:-0}
   postgres:
     image: postgres:18
     container_name: postgres_db
@@ -140,6 +179,7 @@ services:
     
 
 volumes:
+  mysql-data:
   pgdata:
   redisdata:
   mongo-data:
