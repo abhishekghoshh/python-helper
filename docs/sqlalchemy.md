@@ -16,3 +16,5 @@
 - [SQLAlchemy 2.0 ORM Crash Course - Manage Relational Databases with Python (SQLAlchemy 2.0)](https://www.youtube.com/watch?v=XWtj4zLl_tg)
 - [Building a REST API with FastAPI, Async SQLModel, and PostgreSQL](https://www.youtube.com/watch?v=I8WiIXMDydw)
 - [Fast API Crash Course Code-along | Build an app with Postgres, SQL Alchemy, Async, and more](https://www.youtube.com/watch?v=gQTRsZpR7Gw)
+
+
