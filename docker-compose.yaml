@@ -175,7 +175,7 @@ services:
     depends_on:
       - mongo
     deploy:
-      replicas: ${MONGO_REPLICAS:-0}
+      replicas: ${MONGO_EXPRESS_REPLICAS:-0}
     
 
 volumes:

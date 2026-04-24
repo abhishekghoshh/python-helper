@@ -1,6 +1,15 @@
 # Python asyncio
 
 
+## Blogs
+
+
+## Medium
+
+- [How to Use Asyncio for Asynchronous Programming in Python](https://medium.com/@AlexanderObregon/how-to-use-asyncio-for-asynchronous-programming-in-python-1339b619f063)
+
+
+
 ## Youtube
 
 ### Introduction
@@ -16,6 +25,7 @@
 
 - [AsyncIO and the Event Loop Explained](https://www.youtube.com/watch?v=RIVcqT2OGPA)
 - [Next-Level Concurrent Programming In Python With Asyncio](https://www.youtube.com/watch?v=GpqAQxH1Afc)
+
 
 ### Courses
 

@@ -39,6 +39,8 @@
   - [Python Features](https://www.youtube.com/playlist?list=PLC0nd42SBTaMpVAAHCAifm5gN2zLk2MBo)
   - [Under the Hood](https://www.youtube.com/playlist?list=PLC0nd42SBTaNJJNMgMBP39-dY9AkEXZOd)
 
+- [BugBytes](https://www.youtube.com/@bugbytes3923/playlists)
+
 - [Python for Beginners (Full Course) | #100DaysOfCode Programming Tutorial in Hindi](https://www.youtube.com/playlist?list=PLu0W_9lII9agwh1XjRt242xIpHhPT2llg)
 
 - [pixegami](https://www.youtube.com/@pixegami/playlists)
@@ -53,8 +55,6 @@
 
 - [Eric Roby](https://www.youtube.com/@codingwithroby)
 
-
-
 - [Tech With Tim](https://www.youtube.com/@TechWithTim)
 
 - [CodeWithHarry](https://www.youtube.com/@CodeWithHarry/playlists)
@@ -64,3 +64,4 @@
   - [Python Programming Course in Hindi (Advanced) 🔥](https://www.youtube.com/watch?v=61a7UkDO50s)
 
 - [Python Programming Tutorials (Computer Science)](https://www.youtube.com/playlist?list=PLi01XoE8jYohWFPpC17Z-wWhPOSuh8Er-)
+

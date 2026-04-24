@@ -6,11 +6,11 @@ Most often it is used to schedule tasks to be performed periodically, such as no
 
 > Environment setup
 ```
-> python3.13 -m venv .venv
+> python3 -m venv .venv
 > source .venv/bin/activate
-> python -m pip install --upgrade pip
+> python3 -m pip install --upgrade pip
 > pip install -r requirements.txt
-> python main.py
+> python3 main.py
 ```
 
 
