@@ -1,0 +1,19 @@
+replicaCount: 2
+
+image:
+  repository: abhishek1009/fastapi-todo-service
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8000
+
+postgresql:
+  auth:
+    postgresPassword: "securepassword"
+    database: "todo_db"
+
+redis:
+  auth:
+    enabled: false
