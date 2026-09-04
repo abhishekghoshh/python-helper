@@ -71,6 +71,11 @@ uvicorn app.main:app --reload
 
 See the [API Guide](api.md) for detailed examples.
 
+## Learn more
+
+- [Concepts](concepts.md) — vector embeddings, semantic search, and distance metrics
+- [Vector Databases & Embeddings](vector-databases.md) — types of vector DBs, search algorithms, and use cases
+
 ## Documentation
 
 Full documentation is available via [MkDocs](https://www.mkdocs.org/):
