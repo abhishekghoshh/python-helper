@@ -1,0 +1,30 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DEFAULT_TIMEOUT=300 \
+    POETRY_VIRTUALENVS_CREATE=false
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends curl git \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Poetry
+RUN pip install --no-cache-dir poetry==1.8.5
+
+# Copy dependency manifests
+COPY pyproject.toml poetry.lock ./
+
+# Install only the docs group
+RUN poetry install --only=docs --no-interaction --no-cache
+
+# Copy documentation
+COPY docs/ ./docs/
+COPY mkdocs.yml ./
+
+EXPOSE 8000
+
+CMD ["mkdocs", "serve", "--dev-addr=0.0.0.0:8000"]

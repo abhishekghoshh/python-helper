@@ -1,0 +1,30 @@
+[project]
+name = "vector-db-poc"
+version = "0.1.0"
+description = "A proof-of-concept for vector databases and embeddings with FastAPI + Qdrant"
+authors = [{name = "Abhishek Ghosh", email = "abhishekghosh@example.com"}]
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi==0.115.6",
+  "uvicorn[standard]==0.32.0",
+  "pydantic==2.10.4",
+  "pydantic-settings==2.6.1",
+  "qdrant-client==1.12.1",
+  "sentence-transformers==3.3.1",
+  "python-dotenv==1.0.0",
+]
+
+[tool.poetry.group.dev.dependencies]
+pytest = "8.3.4"
+pytest-asyncio = "0.24.0"
+httpx = "0.27.2"
+
+[tool.poetry.group.docs.dependencies]
+mkdocs = "1.6.0"
+mkdocs-material = "9.5.0"
+mkdocstrings = {version = "0.26.0", extras = ["python"]}
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

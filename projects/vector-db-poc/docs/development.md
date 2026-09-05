@@ -27,19 +27,38 @@ vector-db-poc/
 │   ├── concepts.md
 │   └── development.md
 ├── Dockerfile
+├── Dockerfile.docs
 ├── docker-compose.yml
-├── requirements.txt
-├── requirements-dev.txt
-├── requirements-docs.txt
+├── pyproject.toml
+├── poetry.lock
 ├── mkdocs.yml
 └── .env.example
 ```
 
+## Prerequisites
+
+- [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/)
+- [Poetry](https://python-poetry.org/) for local development
+- Python 3.11+
+
+## Installation
+
+```bash
+poetry install
+```
+
+This installs the main dependencies plus the `dev` and `docs` groups.
+
 ## Running tests
 
 ```bash
-pip install -r requirements-dev.txt
-pytest -v
+poetry run pytest -v
+```
+
+## Running the docs server (local)
+
+```bash
+poetry run mkdocs serve
 ```
 
 ## Docker commands

@@ -1,5 +1,4 @@
 name: vector-db-poc
-version: "3.9"
 
 services:
   api:
@@ -27,6 +26,19 @@ services:
     volumes:
       - qdrant_storage:/qdrant/storage
       - ./qdrant.yaml:/config/qdrant.yaml:ro
+    restart: unless-stopped
+
+  docs:
+    build:
+      context: .
+      dockerfile: Dockerfile.docs
+    container_name: vector-db-docs
+    ports:
+      - "8001:8000"
+    volumes:
+      - ./docs:/app/docs
+      - ./mkdocs.yml:/app/mkdocs.yml:ro
+    command: mkdocs serve --dev-addr 0.0.0.0:8000
     restart: unless-stopped
 
 volumes:

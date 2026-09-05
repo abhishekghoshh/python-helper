@@ -31,7 +31,7 @@ A proof-of-concept project to learn about **vector databases** and **vector embe
 ### Prerequisites
 
 - [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/)
-- Or: Python 3.11+ with `requirements-dev.txt` installed
+- Or: Python 3.11+ with [Poetry](https://python-poetry.org/) installed
 
 ### Run with Docker
 
@@ -49,11 +49,25 @@ The API will be available at `http://localhost:8000`.
 ### Run locally
 
 ```bash
-pip install -r requirements.txt
+poetry install
 # Start Qdrant (Docker)
 docker-compose up -d qdrant
 # Start the API
-uvicorn app.main:app --reload
+poetry run uvicorn app.main:app --reload
+```
+
+### Run the docs server
+
+```bash
+poetry run mkdocs serve
+# Docs: http://localhost:8000
+```
+
+Or via Docker:
+
+```bash
+docker-compose up -d docs
+# Docs: http://localhost:8001
 ```
 
 ## API endpoints

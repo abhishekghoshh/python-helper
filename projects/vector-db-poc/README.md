@@ -7,7 +7,7 @@ A proof-of-concept for learning about **vector databases** and **vector embeddin
 - Generate embeddings from text using `sentence-transformers` (`all-MiniLM-L6-v2`)
 - Store and retrieve vectors with metadata in Qdrant
 - Semantic search by meaning (not keywords)
-- Fully Dockerized with `docker-compose`
+- Fully Dockerized with `docker-compose` (API + Qdrant + MkDocs)
 - Automated tests and MkDocs documentation
 
 ## Quick start
@@ -19,17 +19,16 @@ docker-compose up --build
 
 API: `http://localhost:8000` · Docs: `http://localhost:8000/docs`
 
-See the [full documentation](docs/) or run locally with:
+See the [full documentation](docs/) or run locally with [Poetry](https://python-poetry.org/):
 
 ```bash
-pip install -r requirements.txt
+poetry install
 docker-compose up -d qdrant
-uvicorn app.main:app --reload
+poetry run uvicorn app.main:app --reload
 ```
 
 Run tests:
 
 ```bash
-pip install -r requirements-dev.txt
-pytest -v
+poetry run pytest -v
 ```
