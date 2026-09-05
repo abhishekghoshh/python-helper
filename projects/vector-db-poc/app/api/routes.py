@@ -4,12 +4,17 @@ from qdrant_client import QdrantClient
 from app.config import settings
 from app.models.schemas import (
     DocumentCreate,
+    DocumentListItem,
     DocumentResponse,
+    EmbeddingRequest,
     EmbeddingResponse,
     HealthResponse,
+    ListDocumentsResponse,
     SearchHit,
+    SearchRequest,
     SearchResponse,
 )
+from app.services.chunking import chunk_text
 from app.services.embedding import EmbeddingService
 from app.services.vector_db import VectorDBService
 
@@ -31,7 +36,8 @@ def get_vector_db_service() -> VectorDBService:
     if _vdb_service is None:
         client = QdrantClient(host=settings.qdrant_host, port=settings.qdrant_port)
         _vdb_service = VectorDBService(
-            client, settings.collection_name, settings.embedding_dim
+            client, settings.collection_name, settings.embedding_dim,
+            distance=settings.qdrant_distance,
         )
     return _vdb_service
 
@@ -45,15 +51,16 @@ def health(emb: EmbeddingService = Depends(get_embedding_service)):
     return HealthResponse(
         status="ok",
         embedding_model=settings.embedding_model,
+        embedding_dim=dim,
     )
 
 
 @router.post("/embed", response_model=EmbeddingResponse)
 def embed(
-    text: str,
+    request: EmbeddingRequest,
     emb: EmbeddingService = Depends(get_embedding_service),
 ):
-    vector = emb.embed(text)
+    vector = emb.embed(request.text)
     return EmbeddingResponse(vector=vector, dimension=len(vector))
 
 
@@ -64,21 +71,40 @@ def add_document(
     vdb: VectorDBService = Depends(get_vector_db_service),
 ):
     vdb.create_collection()
-    vector = emb.embed(doc.text)
-    payload = {"text": doc.text, "doc_id": doc.id, **(doc.metadata or {})}
-    vdb.upsert(
-        [
-            {
-                "id": doc.id,
-                "vector": vector,
-                "payload": payload,
-            }
-        ]
-    )
+
+    chunk_size = doc.chunk_size or len(doc.text)
+    chunk_overlap = doc.chunk_overlap or 0
+
+    chunks = chunk_text(
+        doc.text,
+        chunk_size=chunk_size,
+        chunk_overlap=chunk_overlap,
+    ) if chunk_size < len(doc.text) else [doc.text]
+
+    vectors = emb.embed_batch(chunks) if len(chunks) > 1 else [emb.embed(chunks[0])]
+
+    points = []
+    for i, (chunk, vector) in enumerate(zip(chunks, vectors)):
+        point_id = f"{doc.id}__{i}" if len(chunks) > 1 else doc.id
+        payload = {
+            "text": chunk,
+            "doc_id": doc.id,
+            "chunk_index": i,
+            **(doc.metadata or {}),
+        }
+        points.append({
+            "id": point_id,
+            "vector": vector,
+            "payload": payload,
+        })
+
+    count = vdb.upsert(points)
+
     return DocumentResponse(
         id=doc.id,
         text=doc.text,
-        metadata={k: v for k, v in payload.items() if k not in ("text", "doc_id")},
+        metadata=doc.metadata or {},
+        inserted_chunks=count,
     )
 
 
@@ -89,24 +115,68 @@ def add_documents(
     vdb: VectorDBService = Depends(get_vector_db_service),
 ):
     vdb.create_collection()
-    texts = [d.text for d in docs]
-    vectors = emb.embed_batch(texts)
-    points = [
-        {
-            "id": d.id,
-            "vector": vectors[i],
-            "payload": {"text": d.text, "doc_id": d.id, **(d.metadata or {})},
-        }
-        for i, d in enumerate(docs)
-    ]
+
+    points = []
+    for doc in docs:
+        chunk_size = doc.chunk_size or len(doc.text)
+        chunk_overlap = doc.chunk_overlap or 0
+
+        chunks = chunk_text(
+            doc.text,
+            chunk_size=chunk_size,
+            chunk_overlap=chunk_overlap,
+        ) if chunk_size < len(doc.text) else [doc.text]
+
+        vectors = emb.embed_batch(chunks) if len(chunks) > 1 else [emb.embed(chunks[0])]
+
+        for i, (chunk, vector) in enumerate(zip(chunks, vectors)):
+            point_id = f"{doc.id}__{i}" if len(chunks) > 1 else doc.id
+            payload = {
+                "text": chunk,
+                "doc_id": doc.id,
+                "chunk_index": i,
+                **(doc.metadata or {}),
+            }
+            points.append({
+                "id": point_id,
+                "vector": vector,
+                "payload": payload,
+            })
+
     count = vdb.upsert(points)
     return {"inserted": count, "ids": [d.id for d in docs]}
 
 
+@router.get("/documents/", response_model=ListDocumentsResponse)
+def list_documents(
+    limit: int = 100,
+    offset: str | None = None,
+    vdb: VectorDBService = Depends(get_vector_db_service),
+):
+    if not vdb.client.collection_exists(settings.collection_name):
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Collection '{settings.collection_name}' does not exist. Add documents first.",
+        )
+    points, next_page = vdb.scroll(limit=limit, offset=offset)
+    documents = [
+        DocumentListItem(
+            id=p["payload"].get("doc_id", p["id"]),
+            text=p["payload"].get("text", ""),
+            metadata={k: v for k, v in p["payload"].items() if k not in ("text", "doc_id", "chunk_index")},
+        )
+        for p in points
+    ]
+    return ListDocumentsResponse(
+        count=len(documents),
+        documents=documents,
+        next_page=next_page,
+    )
+
+
 @router.post("/search", response_model=SearchResponse)
 def search(
-    query: str,
-    top_k: int = 5,
+    request: SearchRequest,
     emb: EmbeddingService = Depends(get_embedding_service),
     vdb: VectorDBService = Depends(get_vector_db_service),
 ):
@@ -115,18 +185,22 @@ def search(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Collection '{settings.collection_name}' does not exist. Add documents first.",
         )
-    query_vector = emb.embed(query)
-    results = vdb.search(query_vector, top_k=top_k)
+    query_vector = emb.embed(request.query)
+    results = vdb.search(
+        query_vector,
+        top_k=request.top_k,
+        score_threshold=request.score_threshold,
+    )
     hits = [
         SearchHit(
             id=r["payload"].get("doc_id", r["id"]),
             text=r["payload"].get("text", ""),
             score=round(r["score"], 4),
-            metadata={k: v for k, v in r["payload"].items() if k not in ("text", "doc_id")},
+            metadata={k: v for k, v in r["payload"].items() if k not in ("text", "doc_id", "chunk_index")},
         )
         for r in results
     ]
-    return SearchResponse(query=query, hits=hits)
+    return SearchResponse(query=request.query, hits=hits)
 
 
 @router.delete("/documents/{doc_id}", status_code=status.HTTP_204_NO_CONTENT)
@@ -134,5 +208,5 @@ def delete_document(
     doc_id: str,
     vdb: VectorDBService = Depends(get_vector_db_service),
 ):
-    vdb.delete(ids=[doc_id])
+    vdb.delete_by_doc_id(doc_id)
     return

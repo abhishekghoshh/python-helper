@@ -7,10 +7,37 @@ site_dir: site
 
 nav:
   - Home: index.md
-  - Concepts: concepts.md
-  - Vector Databases & Embeddings: vector-databases.md
-  - API Guide: api.md
+  - Concepts:
+    - Overview: concepts.md
+    - Vectors: concepts/vectors.md
+    - Embeddings: concepts/embeddings.md
+    - Embedding Models: concepts/embedding-models.md
+    - Similarity & Distance: concepts/similarity.md
+    - Chunking: concepts/chunking.md
+    - Metadata: concepts/metadata.md
+  - Vector Databases:
+    - Overview: vector-databases.md
+    - Comparison: vector-databases/comparison.md
+    - Indexing: vector-databases/indexing.md
+    - ANN Search: vector-databases/ann.md
+    - Hybrid Search: vector-databases/hybrid-search.md
+    - Metadata Filtering: vector-databases/metadata-filtering.md
+  - Architecture:
+    - Overview: architecture/architecture.md
+    - Data Flow: architecture/data-flow.md
+    - Embedding Service: architecture/embedding-service.md
+    - Vector DB Service: architecture/vector-db-service.md
+    - API Routes: architecture/api-routes.md
+  - API Reference: api.md
   - Development: development.md
+  - Interview Prep:
+    - Fundamentals: interview/fundamentals.md
+    - Similarity Search: interview/similarity-search.md
+    - Vector Databases: interview/vector-databases.md
+    - Embedding Models: interview/embedding-models.md
+    - System Design: interview/system-design.md
+    - Scenarios: interview/scenarios.md
+  - Project Review: project-review.md
 
 theme:
   name: material

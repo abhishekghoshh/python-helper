@@ -6,7 +6,9 @@ A proof-of-concept project to learn about **vector databases** and **vector embe
 
 - **Generating embeddings** from text using [sentence-transformers](https://www.sbert.net/) (`all-MiniLM-L6-v2`)
 - **Storing vectors** with metadata in a [Qdrant](https://qdrant.tech/) vector database
-- **Semantic search** — find documents by meaning, not just keyword matching
+- **Document chunking** — split long documents into overlapping chunks for better retrieval
+- **Semantic search** — find documents by meaning, not just keyword matching, with configurable score thresholds and top-K
+- **Metadata filtering** — store and filter documents by metadata
 - **Dockerized** deployment with `docker-compose`
 
 ## Architecture
@@ -78,6 +80,7 @@ docker-compose up -d docs
 | POST   | `/api/v1/embed` | Generate embeddings for a text |
 | POST   | `/api/v1/documents/` | Add a single document |
 | POST   | `/api/v1/documents/batch/` | Add multiple documents |
+| GET    | `/api/v1/documents/` | List all stored documents |
 | POST   | `/api/v1/search` | Semantic search |
 | DELETE | `/api/v1/documents/{doc_id}` | Delete a document |
 
@@ -87,14 +90,16 @@ See the [API Guide](api.md) for detailed examples.
 
 ## Learn more
 
-- [Concepts](concepts.md) — vector embeddings, semantic search, and distance metrics
-- [Vector Databases & Embeddings](vector-databases.md) — types of vector DBs, search algorithms, and use cases
+- [Architecture](architecture/architecture.md) — how the components connect
+- [Concepts](concepts.md) — vectors, embeddings, similarity metrics
+- [Vector Databases](vector-databases.md) — types of vector DBs, search algorithms
+- [API Guide](api.md) — detailed API documentation
+- [Interview Prep](interview/fundamentals.md) — Q&A for embeddings and vector DB interviews
 
 ## Documentation
 
 Full documentation is available via [MkDocs](https://www.mkdocs.org/):
 
 ```bash
-pip install -r requirements-docs.txt
-mkdocs serve
+poetry run mkdocs serve
 ```

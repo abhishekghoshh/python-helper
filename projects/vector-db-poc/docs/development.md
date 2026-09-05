@@ -6,33 +6,63 @@
 vector-db-poc/
 ├── app/
 │   ├── __init__.py
-│   ├── main.py              # FastAPI application factory
+│   ├── main.py              # FastAPI application entry point
 │   ├── config.py            # Pydantic Settings (env-based)
 │   ├── api/
 │   │   ├── __init__.py
-│   │   └── routes.py        # API endpoints
+│   │   └── routes.py        # API endpoints (health, embed, documents, search, delete)
 │   ├── models/
 │   │   ├── __init__.py
 │   │   └── schemas.py       # Pydantic request/response models
 │   └── services/
 │       ├── __init__.py
 │       ├── embedding.py     # sentence-transformers wrapper
-│       └── vector_db.py     # Qdrant client wrapper
+│       ├── vector_db.py     # Qdrant client wrapper
+│       └── chunking.py      # Text chunking utility
 ├── tests/
 │   ├── __init__.py
-│   └── test_routes.py
+│   ├── conftest.py          # Shared fixtures
+│   ├── test_routes.py       # API integration tests
+│   └── test_chunking.py     # Unit tests for chunking
 ├── docs/                    # MkDocs documentation
-│   ├── index.md
 │   ├── api.md
 │   ├── concepts.md
-│   └── development.md
+│   ├── concepts/
+│   │   ├── vectors.md
+│   │   ├── embeddings.md
+│   │   ├── embedding-models.md
+│   │   ├── similarity.md
+│   │   ├── chunking.md
+│   │   └── metadata.md
+│   ├── vector-databases.md
+│   ├── vector-databases/
+│   │   ├── comparison.md
+│   │   ├── indexing.md
+│   │   ├── ann.md
+│   │   ├── hybrid-search.md
+│   │   └── metadata-filtering.md
+│   ├── architecture/
+│   │   ├── architecture.md
+│   │   ├── data-flow.md
+│   │   ├── embedding-service.md
+│   │   ├── vector-db-service.md
+│   │   └── api-routes.md
+│   ├── development.md
+│   ├── interview/
+│   │   ├── fundamentals.md
+│   │   ├── similarity-search.md
+│   │   ├── vector-databases.md
+│   │   ├── embedding-models.md
+│   │   ├── system-design.md
+│   │   └── scenarios.md
+│   ├── index.md
+│   └── project-review.md
 ├── Dockerfile
 ├── Dockerfile.docs
 ├── docker-compose.yml
 ├── pyproject.toml
 ├── poetry.lock
-├── mkdocs.yml
-└── .env.example
+└── mkdocs.yml
 ```
 
 ## Prerequisites
@@ -85,3 +115,4 @@ Copy `.env.example` to `.env` and adjust:
 | `COLLECTION_NAME` | `demo` | Qdrant collection name |
 | `EMBEDDING_MODEL` | `sentence-transformers/all-MiniLM-L6-v2` | Embedding model |
 | `EMBEDDING_DIM` | `384` | Expected embedding dimension |
+| `QDRANT_DISTANCE` | `cosine` | Distance metric: `cosine`, `euclidean`, or `dot` |
