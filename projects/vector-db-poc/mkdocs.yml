@@ -73,10 +73,10 @@ plugins:
         python:
           options:
             show_source: true
+  - mermaid2
 
 markdown_extensions:
   - admonition
-  - codehilite
   - toc:
       permalink: true
   - attr_list

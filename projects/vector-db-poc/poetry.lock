@@ -47,6 +47,29 @@ files = [
 dev = ["backports.zoneinfo ; python_version < \"3.9\"", "freezegun (>=1.0,<2.0)", "jinja2 (>=3.0)", "pytest (>=6.0)", "pytest-cov", "pytz", "setuptools", "tzdata ; sys_platform == \"win32\""]
 
 [[package]]
+name = "beautifulsoup4"
+version = "4.15.0"
+description = "Screen-scraping library"
+optional = false
+python-versions = ">=3.7.0"
+groups = ["docs"]
+files = [
+    {file = "beautifulsoup4-4.15.0-py3-none-any.whl", hash = "sha256:d6f88de62e1d4e38ecb1077eb9724cd0eff29d2a08ca16a401e9b9e93f117cf9"},
+    {file = "beautifulsoup4-4.15.0.tar.gz", hash = "sha256:288e3ca7d54b06f2ac191970bc275c1939cb46d450b255bf6718b04aa37ab4f7"},
+]
+
+[package.dependencies]
+soupsieve = ">=1.6.1"
+typing-extensions = ">=4.0.0"
+
+[package.extras]
+cchardet = ["cchardet"]
+chardet = ["chardet"]
+charset-normalizer = ["charset-normalizer"]
+html5lib = ["html5lib"]
+lxml = ["lxml"]
+
+[[package]]
 name = "certifi"
 version = "2026.7.22"
 description = "Python package for providing Mozilla's CA Bundle."
@@ -376,6 +399,21 @@ nvvm = ["nvidia-nvvm (==13.0.88.*) ; sys_platform == \"linux\" and (platform_mac
 opencl = ["nvidia-cuda-opencl (==13.0.85.*) ; sys_platform == \"linux\" and (platform_machine == \"aarch64\" or platform_machine == \"x86_64\") or (sys_platform == \"linux\" or sys_platform == \"win32\") and platform_machine == \"x86_64\""]
 profiler = ["nvidia-cuda-profiler-api (==13.0.85.*) ; sys_platform == \"linux\" and (platform_machine == \"aarch64\" or platform_machine == \"x86_64\") or (sys_platform == \"linux\" or sys_platform == \"win32\") and platform_machine == \"x86_64\""]
 sanitizer = ["nvidia-cuda-sanitizer-api (==13.0.85.*) ; sys_platform == \"linux\" and (platform_machine == \"aarch64\" or platform_machine == \"x86_64\") or (sys_platform == \"linux\" or sys_platform == \"win32\") and platform_machine == \"x86_64\""]
+
+[[package]]
+name = "editorconfig"
+version = "0.17.1"
+description = "EditorConfig File Locator and Interpreter for Python"
+optional = false
+python-versions = ">=3.9"
+groups = ["docs"]
+files = [
+    {file = "editorconfig-0.17.1-py3-none-any.whl", hash = "sha256:1eda9c2c0db8c16dbd50111b710572a5e6de934e39772de1959d41f64fc17c82"},
+    {file = "editorconfig-0.17.1.tar.gz", hash = "sha256:23c08b00e8e08cc3adcddb825251c497478df1dada6aefeb01e626ad37303745"},
+]
+
+[package.extras]
+dev = ["mypy (>=1.15)"]
 
 [[package]]
 name = "fastapi"
@@ -947,6 +985,21 @@ docs = ["distributed", "lz4", "matplotlib", "numpy", "numpydoc", "pandas", "psut
 test = ["distributed", "lz4", "memory_profiler", "numpy", "pytest", "pytest-asyncio", "pytest-cov", "pytest-run-parallel", "pytest-timeout", "threadpoolctl"]
 
 [[package]]
+name = "jsbeautifier"
+version = "2.0.3"
+description = "JavaScript unobfuscator and beautifier."
+optional = false
+python-versions = "*"
+groups = ["docs"]
+files = [
+    {file = "jsbeautifier-2.0.3-py3-none-any.whl", hash = "sha256:f0190e279a2cdb827556ada63f41c9c63c11f8116ee06e264b24aa50311cbee3"},
+    {file = "jsbeautifier-2.0.3.tar.gz", hash = "sha256:9579d4e9dbaa00383f3efdff4c98c8140bb85ba319398e8b97cdaba27abd6ba3"},
+]
+
+[package.dependencies]
+editorconfig = ">=0.12.2"
+
+[[package]]
 name = "markdown"
 version = "3.10.3"
 description = "Python implementation of John Gruber's Markdown."
@@ -1179,6 +1232,29 @@ files = [
     {file = "mkdocs_material_extensions-1.3.1-py3-none-any.whl", hash = "sha256:adff8b62700b25cb77b53358dad940f3ef973dd6db797907c49e3c2ef3ab4e31"},
     {file = "mkdocs_material_extensions-1.3.1.tar.gz", hash = "sha256:10c9511cea88f568257f960358a467d12b970e1f7b2c0e5fb2bb48cab1928443"},
 ]
+
+[[package]]
+name = "mkdocs-mermaid2-plugin"
+version = "1.2.3"
+description = "A MkDocs plugin for including mermaid graphs in markdown sources"
+optional = false
+python-versions = ">=3.8"
+groups = ["docs"]
+files = [
+    {file = "mkdocs_mermaid2_plugin-1.2.3-py3-none-any.whl", hash = "sha256:33f60c582be623ed53829a96e19284fc7f1b74a1dbae78d4d2e47fe00c3e190d"},
+    {file = "mkdocs_mermaid2_plugin-1.2.3.tar.gz", hash = "sha256:fb6f901d53e5191e93db78f93f219cad926ccc4d51e176271ca5161b6cc5368c"},
+]
+
+[package.dependencies]
+beautifulsoup4 = ">=4.6.3"
+jsbeautifier = "*"
+mkdocs = ">=1.0.4"
+pymdown-extensions = ">=8.0"
+requests = "*"
+setuptools = ">=18.5"
+
+[package.extras]
+test = ["mkdocs-macros-test", "mkdocs-material", "packaging", "requests-html"]
 
 [[package]]
 name = "mkdocstrings"
@@ -2836,7 +2912,7 @@ version = "84.0.0"
 description = "Most extensible Python build backend with support for C/C++ extension modules"
 optional = false
 python-versions = ">=3.10"
-groups = ["main"]
+groups = ["main", "docs"]
 files = [
     {file = "setuptools-84.0.0-py3-none-any.whl", hash = "sha256:51a52592b3b99e102b609654876bd65f19f999935166d1352678931132b0c670"},
     {file = "setuptools-84.0.0.tar.gz", hash = "sha256:f4695c21257f0d9b537ec2692c941d02ee143b7cc1276941349a546573b2ef73"},
@@ -2873,6 +2949,18 @@ groups = ["main", "dev"]
 files = [
     {file = "sniffio-1.3.1-py3-none-any.whl", hash = "sha256:2f6da418d1f1e0fddd844478f41680e794e6051915791a034ff65e5f100525a2"},
     {file = "sniffio-1.3.1.tar.gz", hash = "sha256:f4324edc670a0f49750a81b895f35c3adb843cca46f0530f79fc1babb23789dc"},
+]
+
+[[package]]
+name = "soupsieve"
+version = "2.9.2"
+description = "A modern CSS selector implementation for Beautiful Soup."
+optional = false
+python-versions = ">=3.10"
+groups = ["docs"]
+files = [
+    {file = "soupsieve-2.9.2-py3-none-any.whl", hash = "sha256:8089a26fd974ca7a1f30276d3d8492ab266ab15af581642dfe8aa162e0c1c823"},
+    {file = "soupsieve-2.9.2.tar.gz", hash = "sha256:4a55d8cf158a9c2e587fa4922f1bbb91d68ac829e2d6f25403a85747c71daf74"},
 ]
 
 [[package]]
@@ -3145,7 +3233,7 @@ version = "4.16.0"
 description = "Backported and Experimental Type Hints for Python 3.9+"
 optional = false
 python-versions = ">=3.9"
-groups = ["main", "dev"]
+groups = ["main", "dev", "docs"]
 files = [
     {file = "typing_extensions-4.16.0-py3-none-any.whl", hash = "sha256:481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8"},
     {file = "typing_extensions-4.16.0.tar.gz", hash = "sha256:dc983d19a509c94dba722ee6abd33940f7c05a89e243c47e907eb4db6f1a43e5"},
@@ -3585,4 +3673,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.11"
-content-hash = "1229a6918fdc39009bb8f7ee2af7fabd86a166844df399026dab2fabae5782b5"
+content-hash = "88d0e4c7db3100b4b393619820d9b99887ffbfbff694ec319427cf2b3485230d"
