@@ -18,7 +18,8 @@ vector-db-poc/
 │       ├── __init__.py
 │       ├── embedding.py     # sentence-transformers wrapper
 │       ├── vector_db.py     # Qdrant client wrapper
-│       └── chunking.py      # Text chunking utility
+│   └── chunking.py      # Text chunking utility
+├── streamlit_app.py     # Streamlit web UI for the API
 ├── tests/
 │   ├── __init__.py
 │   ├── conftest.py          # Shared fixtures
@@ -59,6 +60,7 @@ vector-db-poc/
 │   └── project-review.md
 ├── Dockerfile
 ├── Dockerfile.docs
+├── Dockerfile.streamlit
 ├── docker-compose.yml
 ├── pyproject.toml
 ├── poetry.lock
@@ -78,6 +80,11 @@ poetry install
 ```
 
 This installs the main dependencies plus the `dev` and `docs` groups.
+To include the Streamlit UI dependencies, add `--with streamlit`:
+
+```bash
+poetry install --with streamlit
+```
 
 ## Running tests
 
@@ -91,11 +98,33 @@ poetry run pytest -v
 poetry run mkdocs serve
 ```
 
+Open http://localhost:8000 in your browser.
+
+## Running the Streamlit UI (local)
+
+The Streamlit app provides a web interface for interacting with the vector
+database API (embeddings, document CRUD, semantic search).
+
+```bash
+# 1. Start the API and Qdrant (via Docker Compose or locally)
+docker-compose up -d api qdrant
+
+# 2. Run Streamlit (install with: poetry install --with streamlit)
+API_BASE_URL=http://localhost:8000 \
+  poetry run streamlit run streamlit_app.py --server.port 8501
+```
+
+Or via Docker Compose — the `streamlit` service is pre-configured to
+connect to the `api` service automatically.
+
 ## Docker commands
 
 ```bash
-# Build and start
+# Build and start all services
 docker-compose up --build
+
+# Start specific services
+docker-compose up -d api qdrant streamlit
 
 # Stop and clean
 docker-compose down -v
@@ -114,5 +143,8 @@ Copy `.env.example` to `.env` and adjust:
 | `QDRANT_PORT` | `6333` | Qdrant REST port |
 | `COLLECTION_NAME` | `demo` | Qdrant collection name |
 | `EMBEDDING_MODEL` | `sentence-transformers/all-MiniLM-L6-v2` | Embedding model |
-| `EMBEDDING_DIM` | `384` | Expected embedding dimension |
 | `QDRANT_DISTANCE` | `cosine` | Distance metric: `cosine`, `euclidean`, or `dot` |
+| `LOG_LEVEL` | `INFO` | Python log level (DEBUG, INFO, WARNING, ERROR) |
+| `LOG_FORMAT` | `standard` | Log format: `standard` or `json` |
+| `LOG_FILE` | (none) | Optional path for file logging |
+| `API_BASE_URL` | `http://localhost:8000` | Backend API URL (Streamlit app) |

@@ -24,10 +24,10 @@ RUN pip install --no-cache-dir --retries 5 torch==2.5.1 \
 COPY pyproject.toml poetry.lock ./
 
 # Export Python dependencies from the Poetry lock file, then install with pip.
-# torch and nvidia-* CUDA packages are excluded because CPU-only torch was
-# installed in the layer above.
+# torch and nvidia-*/cuda-*/triton CUDA packages are excluded because
+# CPU-only torch was installed in the layer above (avoids multi-GB downloads).
 RUN poetry export --only=main --without-hashes -o /tmp/requirements.txt \
-    && grep -viE '^(torch==|nvidia-|triton==)' /tmp/requirements.txt > /tmp/requirements-filtered.txt \
+    && grep -viE '^(torch|nvidia-|cuda-|triton)' /tmp/requirements.txt > /tmp/requirements-filtered.txt \
     && pip install --no-cache-dir --retries 5 -r /tmp/requirements-filtered.txt
 
 COPY . .

@@ -30,6 +30,10 @@ mkdocstrings = {version = "0.26.0", extras = ["python"]}
 mkdocs-autorefs = ">=1.0,<1.4"
 mkdocs-mermaid2-plugin = ">=1.0"
 
+[tool.poetry.group.streamlit.dependencies]
+streamlit = ">=1.40.0"
+httpx = ">=0.27.0"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"

@@ -10,8 +10,8 @@ A proof-of-concept for learning about **vector databases** and **vector embeddin
 - Semantic search by meaning (not keywords), with score thresholds
 - List and filter stored documents
 - Configurable similarity metrics (cosine, euclidean, dot product)
-- Fully Dockerized with `docker-compose` (API + Qdrant + MkDocs)
-- Automated tests and comprehensive MkDocs documentation
+- Fully Dockerized with `docker-compose` (API + Qdrant + MkDocs + Streamlit)
+- Configurable logging via `LOG_LEVEL` and `LOG_FORMAT` environment variables
 
 ## Quick start
 
@@ -20,7 +20,7 @@ cp .env.example .env
 docker-compose up --build
 ```
 
-API: `http://localhost:8000` · Docs: `http://localhost:8001` · API Docs: `http://localhost:8000/docs`
+API: `http://localhost:8000` · Docs: `http://localhost:8001` · App: `http://localhost:8501` · API Docs: `http://localhost:8000/docs`
 
 See the [full documentation](docs/) or run locally with [Poetry](https://python-poetry.org/):
 
