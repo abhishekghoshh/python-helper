@@ -10,20 +10,25 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     POETRY_VIRTUALENVS_CREATE=false
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends build-essential curl \
+    && apt-get install -y --no-install-recommends build-essential curl git \
     && rm -rf /var/lib/apt/lists/*
+
+# Install Poetry with the export plugin (for generating pip requirements)
+RUN pip install --no-cache-dir poetry==2.4.3 poetry-plugin-export
 
 # Install CPU-only torch first (avoids pulling multi-GB CUDA wheels)
 RUN pip install --no-cache-dir --retries 5 torch==2.5.1 \
     --index-url https://download.pytorch.org/whl/cpu
 
-# Install Poetry
-RUN pip install --no-cache-dir poetry==1.8.5
-
 # Copy dependency manifests
 COPY pyproject.toml poetry.lock ./
 
-RUN poetry install --only=main --no-interaction --no-cache
+# Export Python dependencies from the Poetry lock file, then install with pip.
+# torch and nvidia-* CUDA packages are excluded because CPU-only torch was
+# installed in the layer above.
+RUN poetry export --only=main --without-hashes -o /tmp/requirements.txt \
+    && grep -viE '^(torch==|nvidia-|triton==)' /tmp/requirements.txt > /tmp/requirements-filtered.txt \
+    && pip install --no-cache-dir --retries 5 -r /tmp/requirements-filtered.txt
 
 COPY . .
 

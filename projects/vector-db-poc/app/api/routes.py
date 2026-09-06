@@ -1,6 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from qdrant_client import QdrantClient
 
+import logging
+
 from app.config import settings
 from app.models.schemas import (
     DocumentCreate,
@@ -17,6 +19,8 @@ from app.models.schemas import (
 from app.services.chunking import chunk_text
 from app.services.embedding import EmbeddingService
 from app.services.vector_db import VectorDBService
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
@@ -44,6 +48,7 @@ def get_vector_db_service() -> VectorDBService:
 
 @router.get("/health", response_model=HealthResponse)
 def health(emb: EmbeddingService = Depends(get_embedding_service)):
+    logger.info("Health check requested")
     try:
         dim = emb.dimension
     except Exception:
@@ -60,6 +65,7 @@ def embed(
     request: EmbeddingRequest,
     emb: EmbeddingService = Depends(get_embedding_service),
 ):
+    logger.info("Embedding request: %d chars", len(request.text))
     vector = emb.embed(request.text)
     return EmbeddingResponse(vector=vector, dimension=len(vector))
 
@@ -70,6 +76,7 @@ def add_document(
     emb: EmbeddingService = Depends(get_embedding_service),
     vdb: VectorDBService = Depends(get_vector_db_service),
 ):
+    logger.info("Adding document: id=%s", doc.id)
     vdb.create_collection()
 
     chunk_size = doc.chunk_size or len(doc.text)
@@ -99,6 +106,7 @@ def add_document(
         })
 
     count = vdb.upsert(points)
+    logger.info("Stored document '%s': %d chunks", doc.id, count)
 
     return DocumentResponse(
         id=doc.id,
@@ -116,6 +124,7 @@ def add_documents(
 ):
     vdb.create_collection()
 
+    logger.info("Batch adding %d documents", len(docs))
     points = []
     for doc in docs:
         chunk_size = doc.chunk_size or len(doc.text)
@@ -144,6 +153,7 @@ def add_documents(
             })
 
     count = vdb.upsert(points)
+    logger.info("Batch upserted %d points for %d documents", count, len(docs))
     return {"inserted": count, "ids": [d.id for d in docs]}
 
 
@@ -153,12 +163,14 @@ def list_documents(
     offset: str | None = None,
     vdb: VectorDBService = Depends(get_vector_db_service),
 ):
+    logger.info("Listing documents: limit=%d, offset=%s", limit, offset)
     if not vdb.client.collection_exists(settings.collection_name):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Collection '{settings.collection_name}' does not exist. Add documents first.",
         )
     points, next_page = vdb.scroll(limit=limit, offset=offset)
+    logger.info("Listed %d documents", len(points))
     documents = [
         DocumentListItem(
             id=p["payload"].get("doc_id", p["id"]),
@@ -180,6 +192,7 @@ def search(
     emb: EmbeddingService = Depends(get_embedding_service),
     vdb: VectorDBService = Depends(get_vector_db_service),
 ):
+    logger.info("Search query: '%s' top_k=%d score_threshold=%s", request.query, request.top_k, request.score_threshold)
     if not vdb.client.collection_exists(settings.collection_name):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -191,6 +204,7 @@ def search(
         top_k=request.top_k,
         score_threshold=request.score_threshold,
     )
+    logger.info("Search returned %d results", len(results))
     hits = [
         SearchHit(
             id=r["payload"].get("doc_id", r["id"]),
@@ -208,5 +222,6 @@ def delete_document(
     doc_id: str,
     vdb: VectorDBService = Depends(get_vector_db_service),
 ):
+    logger.info("Deleting document: id=%s", doc_id)
     vdb.delete_by_doc_id(doc_id)
     return

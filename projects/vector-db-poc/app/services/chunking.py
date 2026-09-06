@@ -6,7 +6,10 @@ Chunking splits long documents into smaller pieces so that:
 3. More vectors are stored, improving retrieval granularity
 """
 
+import logging
 import re
+
+logger = logging.getLogger(__name__)
 
 
 class ChunkSizeError(ValueError):
@@ -35,6 +38,7 @@ def chunk_text(
         A list of text chunks (strings), each up to chunk_size characters.
     """
     if not text.strip():
+        logger.debug("chunk_text received empty text; returning []")
         return []
 
     if chunk_size <= 0:
@@ -42,6 +46,8 @@ def chunk_text(
 
     if chunk_overlap >= chunk_size:
         raise ChunkSizeError("chunk_overlap must be less than chunk_size")
+
+    logger.debug("Chunking text (%d chars) with chunk_size=%d, overlap=%d", len(text), chunk_size, chunk_overlap)
 
     # Step 1: Split into paragraphs
     paragraphs = re.split(r"\n\s*\n", text.strip())

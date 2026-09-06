@@ -1,7 +1,12 @@
+"""Qdrant vector database service."""
+
+import logging
 import uuid
 
 from qdrant_client import QdrantClient
 from qdrant_client.http import models as qmodels
+
+logger = logging.getLogger(__name__)
 
 _NAMESPACE = uuid.NAMESPACE_DNS
 
@@ -31,9 +36,21 @@ class VectorDBService:
         self.collection_name = collection_name
         self.embedding_dim = embedding_dim
         self.distance = _DISTANCE_MAP.get(distance.lower(), qmodels.Distance.COSINE)
+        logger.debug(
+            "VectorDBService initialized: collection=%s, dim=%d, distance=%s",
+            collection_name,
+            embedding_dim,
+            distance,
+        )
 
     def create_collection(self) -> None:
         if not self.client.collection_exists(self.collection_name):
+            logger.info(
+                "Creating collection '%s' (dim=%d, distance=%s)",
+                self.collection_name,
+                self.embedding_dim,
+                self.distance,
+            )
             self.client.create_collection(
                 collection_name=self.collection_name,
                 vectors_config=qmodels.VectorParams(
@@ -48,6 +65,7 @@ class VectorDBService:
 
     def upsert(self, points: list[dict]) -> int:
         """points: list of dicts with id, vector, payload (id is a str)."""
+        logger.debug("Upserting %d points into '%s'", len(points), self.collection_name)
         self.client.upsert(
             collection_name=self.collection_name,
             points=[
@@ -73,7 +91,14 @@ class VectorDBService:
         )
         if score_threshold is not None:
             search_kwargs["score_threshold"] = score_threshold
+        logger.debug(
+            "Searching '%s' top_k=%d score_threshold=%s",
+            self.collection_name,
+            top_k,
+            score_threshold,
+        )
         results = self.client.search(**search_kwargs)
+        logger.debug("Search returned %d results", len(results))
         return [
             {
                 "id": str(hit.id),
@@ -98,9 +123,11 @@ class VectorDBService:
             }
             for r in results
         ]
+        logger.debug("Scrolled %d points, next_page=%s", len(points), next_page)
         return points, next_page
 
     def delete(self, ids: list[str]) -> int:
+        logger.info("Deleting %d points by ID from '%s'", len(ids), self.collection_name)
         self.client.delete(
             collection_name=self.collection_name,
             points_selector=qmodels.PointIdsList(points=[str(to_uuid(i)) for i in ids]),
@@ -109,6 +136,7 @@ class VectorDBService:
 
     def delete_by_doc_id(self, doc_id: str) -> None:
         """Delete all points (including chunks) whose payload doc_id matches."""
+        logger.info("Deleting all chunks for doc_id='%s' from '%s'", doc_id, self.collection_name)
         self.client.delete(
             collection_name=self.collection_name,
             points_selector=qmodels.Filter(
