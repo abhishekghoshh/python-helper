@@ -109,6 +109,12 @@ class VectorDBService:
         ]
 
     def scroll(self, limit: int = 100, offset: str | None = None) -> tuple[list[dict], str | None]:
+        # Qdrant's scroll API uses cursor-based pagination where ``offset`` is
+        # a point ID, not a numeric offset.  Treat "0", "" and None as "start
+        # from the beginning" (no offset).
+        if not offset or offset == "0":
+            offset = None
+        logger.debug("Scrolling collection '%s' limit=%d offset=%s", self.collection_name, limit, offset)
         results, next_page = self.client.scroll(
             collection_name=self.collection_name,
             with_payload=True,

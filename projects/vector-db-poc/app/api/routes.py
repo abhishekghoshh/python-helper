@@ -53,8 +53,17 @@ def health(emb: EmbeddingService = Depends(get_embedding_service)):
         dim = emb.dimension
     except Exception:
         dim = 0
+    # Probe Qdrant to report actual connectivity status
+    try:
+        vdb = get_vector_db_service()
+        vdb.client.get_collections()
+        qdrant_status = "connected"
+    except Exception as exc:
+        logger.warning("Qdrant health check failed: %s", exc)
+        qdrant_status = "disconnected"
     return HealthResponse(
         status="ok",
+        qdrant=qdrant_status,
         embedding_model=settings.embedding_model,
         embedding_dim=dim,
     )
@@ -164,11 +173,13 @@ def list_documents(
     vdb: VectorDBService = Depends(get_vector_db_service),
 ):
     logger.info("Listing documents: limit=%d, offset=%s", limit, offset)
-    if not vdb.client.collection_exists(settings.collection_name):
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Collection '{settings.collection_name}' does not exist. Add documents first.",
-        )
+    try:
+        if not vdb.client.collection_exists(settings.collection_name):
+            logger.info("Collection '%s' does not exist, returning empty list", settings.collection_name)
+            return ListDocumentsResponse(count=0, documents=[], next_page=None)
+    except Exception:
+        logger.warning("Cannot reach Qdrant, returning empty list")
+        return ListDocumentsResponse(count=0, documents=[], next_page=None)
     points, next_page = vdb.scroll(limit=limit, offset=offset)
     logger.info("Listed %d documents", len(points))
     documents = [

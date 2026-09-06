@@ -205,30 +205,31 @@ elif page == "📋 List Documents":
     st.title("Stored Documents")
     st.caption("All document chunks currently in the vector database.")
 
-    col1, col2 = st.columns(2)
-    with col1:
-        limit = st.number_input("Limit", min_value=1, max_value=500, value=100)
-    with col2:
-        offset_val = st.number_input("Offset", min_value=0, value=0)
+    limit = st.number_input("Limit", min_value=1, max_value=500, value=100)
 
     if st.button("Refresh"):
         with st.spinner("Fetching documents..."):
             result = api_request(
-                "GET", f"/api/v1/documents/?limit={limit}&offset={offset_val}"
+                "GET", f"/api/v1/documents/?limit={limit}"
             )
-        if result:
+        if result is None:
+            st.warning("Cannot reach the API. Check the API Base URL in the sidebar.")
+        else:
             docs = result.get("documents", [])
-            st.subheader(f"Documents ({len(docs)})")
-            for doc in docs:
-                with st.container():
-                    cols = st.columns([2, 8])
-                    with cols[0]:
-                        st.code(doc["id"], language="text")
-                    with cols[1]:
-                        st.markdown(f"**{doc['text'][:200]}**")
-                        if doc.get("metadata"):
-                            st.caption(f"Metadata: {doc['metadata']}")
-                    st.divider()
+            if not docs:
+                st.info("No documents found. Add documents from the 'Add Document' page.")
+            else:
+                st.subheader(f"Documents ({len(docs)})")
+                for doc in docs:
+                    with st.container():
+                        cols = st.columns([2, 8])
+                        with cols[0]:
+                            st.code(doc["id"], language="text")
+                        with cols[1]:
+                            st.markdown(f"**{doc['text'][:200]}**")
+                            if doc.get("metadata"):
+                                st.caption(f"Metadata: {doc['metadata']}")
+                        st.divider()
 
             if st.button("Delete all (use with caution)"):
                 with st.spinner("Deleting..."):
@@ -238,4 +239,4 @@ elif page == "📋 List Documents":
                 st.rerun()
 
             if result.get("next_page"):
-                st.info("More results available — increase the offset.")
+                st.info("More results available — increase the limit.")
