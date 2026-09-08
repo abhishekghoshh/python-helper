@@ -97,7 +97,7 @@ plus document ingestion (`/documents/`, `/documents/batch/`), search
 | SearchRequest / EmbeddingRequest models | Proper POST body parsing (fixes 422 errors) | `app/models/schemas.py` (modified); `app/api/routes.py` (modified) | Endpoints accept JSON bodies correctly |
 | `ensure_collection` method | Idempotent collection creation for tests and initialization | `app/services/vector_db.py` (modified) | Safe to call before upsert/search |
 | Comprehensive documentation | 30+ doc files covering theory, architecture, interviews | `docs/concepts/*.md`, `docs/vector-databases/*.md`, `docs/interview/*.md`, `docs/architecture/*.md` (new) | Self-learning resource for vector embeddings and vector databases |
-| Test suite expansion | Cover new features and edge cases | `tests/conftest.py`, `tests/test_chunking.py`, `tests/test_routes.py` (modified) | 20 tests: 9 unit (chunking) + 11 integration (API) |
+| Test suite expansion | Cover new features and edge cases | `tests/conftest.py`, `tests/test_chunking.py` (new), `tests/test_routes.py` (modified), `tests/test_vector_db.py` (new) | 22 tests: 9 unit (chunking) + 12 unit (vector DB) + 11 integration (API) |
 
 ---
 
@@ -114,8 +114,13 @@ plus document ingestion (`/documents/`, `/documents/batch/`), search
 | Improvement | Why | Complexity |
 |-------------|-----|------------|
 | Model caching / singleton verification | Confirm the `EmbeddingService` singleton is truly shared across requests (it is, but a test for concurrency would help). | Low |
-| Pagination tests for list_documents | The `offset` parameter isn't tested. | Low |
-| Distance metric integration test | Verify that euclidean and dot-product distances produce different results. | Low |
+| Concurrency test for list_documents | The `next_page` cursor path isn't exercised in integration tests. | Low |
+| Distance metric end-to-end test | Verify euclidean and dot-product distances produce different search results (requires Qdrant). | Low |
+
+**Note:** Unit tests for the distance-metric mapping (`_DISTANCE_MAP`,
+`VectorDBService.distance`) and UUID5 generation (`to_uuid`) were added in
+`tests/test_vector_db.py`. The pagination `limit` parameter is covered by an
+integration test in `tests/test_routes.py`.
 
 ### Nice to have (P2–P3)
 

@@ -317,43 +317,89 @@ flowchart TD
 
 ### Feature: Health Check (`GET /api/v1/health`)
 
-```
-Client
-  → FastAPI (app/main.py)
-    → Router (app/api/routes.py:40, health())
-      → Depends(get_embedding_service) → EmbeddingService.__init__ (lazy)
-      → tries emb.dimension (loads model on demand)
-      → catches Exception → dim=0
-  ← HealthResponse(status="ok", embedding_model=settings.embedding_model)
+```mermaid
+sequenceDiagram
+    participant C as Client
+    participant F as FastAPI
+    participant R as Router (routes.py)
+    participant E as EmbeddingService
+    participant H as HuggingFace Hub
+    participant Q as Qdrant
+
+    C->>F: GET /api/v1/health
+    F->>R: health()
+    R->>E: get_embedding_service()
+    E-->>R: singleton instance
+    R->>E: emb.dimension
+    Note over E: Lazy-loads model on first call
+    E->>H: Download all-MiniLM-L6-v2 (~90MB)
+    H-->>E: Model weights
+    E-->>R: 384
+    R->>Q: get_collections() probe
+    Note over R,Q: Verifies database connectivity
+    Q-->>R: {"collections": [...]}
+    R-->>C: 200 HealthResponse{
+        status: "ok",
+        qdrant: "connected",
+        embedding_model: "...",
+        embedding_dim: 384
+    }
+
+    Note over C,Q: First call: lazy load + probe<br/>Subsequent: cached singletons
 ```
 
 **Key code:**
 ```python
-# app/api/routes.py:40
+# app/api/routes.py:40-48
 @router.get("/health", response_model=HealthResponse)
 def health(emb: EmbeddingService = Depends(get_embedding_service)):
     try:
         dim = emb.dimension
     except Exception:
         dim = 0
-    return HealthResponse(status="ok", embedding_model=settings.embedding_model)
+    try:
+        vdb = get_vector_db_service()
+        vdb.client.get_collections()
+        qdrant_status = "connected"
+    except Exception:
+        qdrant_status = "disconnected"
+    return HealthResponse(
+        status="ok", qdrant=qdrant_status,
+        embedding_model=settings.embedding_model, embedding_dim=dim,
+    )
 ```
 
-**Note:** The `HealthResponse` has a `qdrant` field that defaults to `"connected"` but the endpoint never actually verifies Qdrant connectivity. This is a known gap.
+**Improvement:** The `HealthResponse` now reports the **actual** Qdrant connectivity status (via `get_collections()` probe) instead of hardcoding `"connected"`.
 
 ### Feature: Embed Text (`POST /api/v1/embed`)
 
-```
-Client (text=hello+world)
-  → FastAPI
-    → Router (app/api/routes.py:52, embed())
-      → Depends(get_embedding_service)
-      → emb.embed(text)
-        → EmbeddingService.embed() (app/services/embedding.py:16)
-          → self.load() (lazy-loads SentenceTransformer)
-          → self.model.encode(text, convert_to_numpy=True)
-          → .tolist()
-  ← EmbeddingResponse(vector=[...], dimension=384)
+```mermaid
+sequenceDiagram
+    participant C as Client
+    participant F as FastAPI
+    participant R as Router (routes.py)
+    participant E as EmbeddingService
+    participant M as SentenceTransformer
+
+    C->>F: POST /api/v1/embed {"text":"hello world"}
+    F->>R: embed(request: EmbeddingRequest)
+    Note over F: Body parsed via Pydantic model
+    R->>E: get_embedding_service()
+    E-->>R: singleton instance
+    R->>E: emb.embed("hello world")
+    R->>E: E.emit("embed_start", n=1)
+    E->>E: self.load() — model cache check
+    E->>M: model.encode("hello world", convert_to_numpy=True)
+    Note over M: Forward pass through 6-layer<br/>Transformer, mean pooling
+    M-->>E: NumPy array [0.012, -0.045, ...]
+    E->>E: .tolist() — convert to Python floats
+    E->>E: E.emit("embed_done", n=1, dim=384)
+    E-->>R: [0.012, -0.045, ...] (384 floats)
+    R-->>C: 200 EmbeddingResponse{
+        vector: [...], dimension: 384
+    }
+
+    Note over C,M: Model loaded once, reused for all requests
 ```
 
 ### Feature: Add Document (`POST /api/v1/documents/`)

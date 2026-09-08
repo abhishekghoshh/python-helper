@@ -21,28 +21,55 @@ Realistic system design interview scenarios with full solutions.
 
 ### 2. High-level architecture
 
-```
-┌──────────┐    ┌──────────────┐    ┌──────────────┐
-│  Client  │───▶│ Load Balancer │───▶│ API Service   │
-│ (Browser)│    │              │    │ (FastAPI)    │
-└──────────┘    └──────────────┘    └──┬──┬──┬──┬─┘
-                                        │  │  │  │
-                    ┌───────────────────┘  │  │  └──────────────────┐
-                    │                      │  │                     │
-         ┌──────────▼──┐     ┌───────────▼──┴──┐    ┌─────────────┐
-         │Embed Service│     │  Vector DB       │    │Cache (Redis)│
-         │(TorchServe) │     │(Qdrant Cluster)  │    │             │
-         └──────┬──────┘     └───────────┬──────┘    └─────────────┘
-                │                        │
-         ┌──────▼──────┐                │
-         │ Model       │                │
-         │(bge-large)  │                │
-         └─────────────┘                │
-                                        │
-                    ┌───────────────────▼───────────────────┐
-                    │       Metadata DB (PostgreSQL)        │
-                    │  - Article metadata, versions, dates  │
-                    └───────────────────────────────────────┘
+```mermaid
+flowchart TD
+    subgraph "Client Layer"
+        Client["👥 Client (Browser)"]
+    end
+
+    subgraph "Entry Layer"
+        LB["⚖️ Load Balancer\n(Round-robin, TLS termination)"]
+        API["🚀 API Service\n(FastAPI, async workers)"]
+    end
+
+    subgraph "Compute Layer"
+        Embed["🧠 Embedding Service\n(TorchServe, GPU)\n(bge-large-en-v1.5)"]
+        Model["🤗 Model Weights\n(1.3B params,\n512 token context)"]
+    end
+
+    subgraph "Storage Layer"
+        VDB["🗄️ Vector DB\n(Qdrant Cluster — 3 nodes)\nHNSW index, M=32, ef=100\nCosine similarity, 1024-dim"]
+        Cache["⚡ Cache\n(Redis, 2 nodes)\nHot query embeddings\nTTL=1h"]
+        MetaDB["🗃️ Metadata DB\n(PostgreSQL)\nArticle titles, versions,\ndates, categories, authors"]
+    end
+
+    Click
+    Client -->|"1. POST /search\nquery: 'How to configure SSL?'"| LB
+    LB -->|"2. Forward request"| API
+
+    API -->|"3. Embed query\n(fast path)"| Cache
+    Cache -.->|"Cache miss"| Embed
+    Embed -->|"4. Generate embedding"| Model
+    Model -->|"5. Return 1024-dim vector"| Embed
+
+    API -->|"6. ANN search\n(top-K=10, score>0.7)"| VDB
+    API -->|"7. Pre-filter by\nproduct, version\n(before ANN)"| MetaDB
+
+    VDB -->|"8. Similar vectors"| API
+    MetaDB -->|"9. Filter metadata"| API
+    API -->|"10. Merge results,\nre-rank, format"| API
+    API -->|"11. JSON response\nwith scores"| LB
+    LB -->|"12. Return results"| Client
+
+    classDef client fill:#e1f5fe
+    classDef entry fill:#f3e5f5
+    classDef compute fill:#fff3e0
+    classDef storage fill:#e8f5e5
+
+    class Client client
+    class LB,API entry
+    class Embed,Model compute
+    class VDB,Cache,MetaDB storage
 ```
 
 ### 3. Components

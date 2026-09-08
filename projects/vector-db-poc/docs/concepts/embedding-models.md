@@ -6,20 +6,36 @@ Embedding models are neural networks that convert text (or other data) into dens
 
 ## The full pipeline
 
-```
-Text
-  ↓
-Tokenization
-  ↓
-Tokens
-  ↓
-Transformer layers
-  ↓
-Token representations
-  ↓
-Pooling
-  ↓
-Embedding vector
+```mermaid
+flowchart LR
+    subgraph "Input"
+        Text["📝 Input Text\n\"Vector databases are fast\""]
+    end
+
+    subgraph "Preprocessing"
+        Tok["🔤 Tokenization\n(BPE subword,\nvocab ~30k tokens)"]
+        Tks["🔢 Tokens\ninput_ids: [101, 2345, ..., 102]\nattention_mask: [1,1,...,1]"]
+    end
+
+    subgraph "Encoding"
+        Trans["🧠 Transformer\n(6-layer MiniLM,\nattention mechanism)"]
+        States["🔬 Token States\n(384-dim per token)"]
+    end
+
+    subgraph "Pooling"
+        Pool["🎱 Pooling\n(Mean pooling:\naverage all tokens)"]
+        Embed["🎯 Embedding Vector\n(384-dim,\nL2-normalized)"]
+    end
+
+    Text -->|"encode to subwords"| Tok
+    Tok -->|"look up token\nembeddings"| Tks
+    Tks -->|"forward pass\n6 transformer layers"| Trans
+    Trans -->|"384-dim per token"| States
+    States -->|"average across\ntoken dimension"| Pool
+    Pool -->|"fixed-size vector"| Embed
+
+    style Text fill:#e3f2fd,stroke:#1976d2
+    style Embed fill:#e8f5e5,stroke:#388e3c
 ```
 
 ## 1. Text

@@ -208,6 +208,24 @@ async def test_delete_document(client: AsyncClient, vdb):
 
 
 @pytest.mark.anyio
+async def test_list_documents_pagination(client: AsyncClient, vdb):
+    """The limit parameter respects the requested page size."""
+    await client.post(
+        "/api/v1/documents/",
+        json={"id": "page-a", "text": "First document."},
+    )
+    await client.post(
+        "/api/v1/documents/",
+        json={"id": "page-b", "text": "Second document."},
+    )
+
+    response = await client.get("/api/v1/documents/?limit=1")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["count"] <= 1
+
+
+@pytest.mark.anyio
 async def test_health_includes_embedding_dim(client: AsyncClient, vdb):
     """Health endpoint reports the embedding dimension."""
     response = await client.get("/api/v1/health")

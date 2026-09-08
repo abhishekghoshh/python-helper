@@ -29,8 +29,36 @@ The `SentenceTransformer` model internally:
 2. **Passes tokens** through transformer layers (attention-based neural network)
 3. **Pools** the output token representations into a single fixed-size vector
 
-```
-Text → Tokenizer → Tokens → Transformer → Token States → Pooling → Embedding Vector
+```mermaid
+flowchart LR
+    subgraph "Input"
+        Text["📝 Input Text\n\"Vector databases are fast\""]
+    end
+
+    subgraph "Preprocessing"
+        Tok["🔤 Tokenizer\n(BPE subword tokenization,\nvocabulary ~30k tokens)"]
+        Tks["🔢 Tokens\ninput_ids: [101, 2345, ..., 102]\nattention_mask: [1,1,...,1]"]
+    end
+
+    subgraph "Encoding"
+        Trans["🧠 Transformer\n(6-layer MiniLM,\ntoken + position embeddings)"]
+        States["🔬 Token States\n(384-dim vector per token)"]
+    end
+
+    subgraph "Pooling"
+        Pool["🎱 Pooling Layer\n(Mean pooling:\naverage all token vectors)"]
+        Embed["🎯 Embedding Vector\n(384-dim vector,\nL2-normalized)"]
+    end
+
+    Text -->|"encode to subwords"| Tok
+    Tok -->|"look up token\nembeddings"| Tks
+    Tks -->|"forward pass\nthrough 6 layers"| Trans
+    Trans -->|"per-token 384-dim\nhidden states"| States
+    States -->|"average across\nall tokens"| Pool
+    Pool -->|"final fixed-size\nvector"| Embed
+
+    style Text fill:#e3f2fd,stroke:#1976d2
+    style Embed fill:#e8f5e5,stroke:#388e3c
 ```
 
 The `all-MiniLM-L6-v2` model produces **384-dimensional** vectors using a 6-layer transformer with ~22M parameters. It's compact and fast, making it ideal for learning.

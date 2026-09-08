@@ -350,9 +350,38 @@ Matches: "Password reset instructions", "Account security settings"
 
 Find similar items based on embeddings:
 
-```
-User likes: Item A, Item B
-→ Find items with similar embeddings → Recommend Item C, Item D
+```mermaid
+flowchart LR
+    subgraph "User Interaction"
+        UserIn["👤 User likes Items A & B"]
+    end
+
+    subgraph "Processing Pipeline"
+        Retriever["🔍 Retriever\n(Query: A+B embeddings)"]
+        ANN["🔮 ANN Search\n(HNSW over item embeddings)"]
+        Scorer["📊 Re-ranker\n(similarity + popularity)"]
+        Filter["🔒 Filter\n(remove seen items)"]
+    end
+
+    subgraph "Output"
+        Results["📦 Items C, D\n(score: 0.85, 0.72)"]
+        UserOut["👤 User receives recommendations"]
+    end
+
+    UserIn -->|"Embed liked items"| Retriever
+    Retriever -->|"Search K=50 neighbors"| ANN
+    ANN -->|"Candidate set"| Scorer
+    Scorer -->|"Apply business rules"| Filter
+    Filter -->|"Final ranked list"| Results
+    Results -->|Display| UserOut
+
+    classDef input fill:#e1f5fe
+    classDef process fill:#fff3e0
+    classDef output fill:#e8f5e5
+
+    class UserIn,UserOut input
+    class Retriever,ANN,Scorer,Filter process
+    class Results output
 ```
 
 ### LLM / RAG (Retrieval-Augmented Generation)
@@ -384,11 +413,41 @@ Find near-duplicate items (documents, images, products):
 
 ### Cross-modal search
 
-Using multi-modal embeddings:
+Using multi-modal embeddings to bridge different data types:
 
-```
-Query: "a dog playing in the snow" (text)
-→ Find: images of dogs in snow
+```mermaid
+flowchart LR
+    subgraph "Input Modalities"
+        TextQ["📝 Query: \"a dog playing\nin the snow\" (text)"]
+        ImgQ["🖼️ Search space:\n10M product images"]
+    end
+
+    subgraph "Cross-modal Pipeline"
+        TextEmbed["🔤 Text Encoder\n(CLIP text encoder,\n768-dim)"]
+        ImgIndex["🗄️ Image Index\n(CLIP image embeddings,\nHNSW, 768-dim,\ncosine similarity)"]
+        Retriever["🔍 Retriever\n(K=5, score > 0.25)"]
+        Filter["🔒 Filter\n(product category)"]
+        Ranker["📊 Ranker\n(similarity + recency)"]
+    end
+
+    subgraph "Output"
+        Results["🖼️ Top-K Images:\n1. Golden Retriever puppy in snow\n2. Sled dogs playing in snow\n3. Dog sledding team"]
+    end
+
+    TextQ -->|"Tokenize,\nembed to 768-dim vector"| TextEmbed
+    ImgQ -->|"Pre-encoded at\nindex time"| ImgIndex
+    TextEmbed -->|"Vector search"| Retriever
+    Retriever -->|"Candidate set"| Filter
+    Filter -->|"Business rules"| Ranker
+    Ranker -->|"Ranked results"| Results
+
+    classDef input fill:#e1f5fe
+    classDef process fill:#fff3e0
+    classDef output fill:#e8f5e5
+
+    class TextQ,ImgQ input
+    class TextEmbed,ImgIndex,Retriever,Filter,Ranker process
+    class Results output
 ```
 
 ---

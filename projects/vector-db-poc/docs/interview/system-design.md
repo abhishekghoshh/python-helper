@@ -162,23 +162,48 @@ Phase 5: Decommission old system
 
 #### Architecture
 
-```
-Documents
-    ↓
-[Ingestion Pipeline]
-    ↓
-Chunk → Embed → Vector DB
-    ↓
-┌─────────────────────────────────┐
-│ User Query                      │
-│    ↓                            │
-│ Embed Query                     │
-│    ↓                            │
-│ Retrieve top-K chunks           │
-│    ↓                            │
-│ Context: [chunk1, chunk2, ...]   │
-│ LLM: Query + Context → Answer   │
-└─────────────────────────────────┘
+```mermaid
+flowchart TD
+    subgraph Ingestion["📥 Ingestion Pipeline"]
+        direction TB
+        Docs["📄 Source Documents\n(knowledge base, PDFs, APIs)"]
+        Chunking["✂️ Text Chunking\n(fixed-size: 512 tokens,\n20% overlap)"]
+        Embedding["🔢 Embedding\n(sbert all-MiniLM-L6-v2,\n384-dim vectors)"]
+        VDB["🗄️ Vector Database\n(Qdrant with HNSW index,\ncosine similarity)"]
+
+        Docs -->|"Read & clean"| Chunking
+        Chunking -->|"Encode each chunk"| Embedding
+        Embedding -->|"Store with\nmetadata + vectors"| VDB
+    end
+
+    subgraph RAG["🔄 Retrieval-Augmented Generation"]
+        direction TB
+        UserQ["👤 User Query\n“What are vector databases?”"]
+        QueryEmbed["🔢 Query Embedding\n(same model → 384-dim\nvector)"]
+        Retrieve["🔍 Retrieve Top-K\n(K=3, score > 0.3)"]
+        Context["📓 Assembled Context\n[chunk1] [chunk2] [chunk3]\n~1000 tokens"]
+        Prompt["📝 Prompt Template\nContext + Query →\nformatted for LLM"]
+        LLM["🤖 LLM Generation\n(GPT-4 / Claude)\ngrounded answer"]
+        Answer["💬 Final Answer\n(explainable,\nretrieval-augmented)"]
+
+        UserQ -->|"Embed"| QueryEmbed
+        QueryEmbed -->|"ANN search"| Retrieve
+        Retrieve -->|"Extract metadata\n+ text"| Context
+        Context -->|"Format"| Prompt
+        Prompt -->|"Generate"| LLM
+        LLM -->|"Respond"| Answer
+    end
+
+    VDB <-->|"ANN search"| Retrieve
+
+    classDef process fill:#fff3e0,stroke:#333
+    classDef storage fill:#e8f5e5,stroke:#333
+    classDef ui fill:#e3f2fd,stroke:#333
+
+    class Docs,Chunking,Embedding process
+    class VDB storage
+    class UserQ,Answer ui
+    class QueryEmbed,Retrieve,Context,Prompt,LLM process
 ```
 
 #### Key decisions
@@ -209,16 +234,69 @@ Chunk → Embed → Vector DB
 **Approaches:**
 
 1. **Dual-write with versioning**:
-   ```
-   New docs → embed with BOTH old and new models → store with version metadata
-   Query → embed with new model → search new vectors
-   Backfill → re-embed old docs with new model
-   ```
+   ```mermaid
+   flowchart LR
+       subgraph "Write Path"
+           NewDocs["📄 New Documents\n(arriving from source)"]
+           DualEmbed["🔢 Embed with BOTH\nmodels simultaneously"]
+           DualStore["🗄️ Store vectors in\nboth v1 and v2\ncollections"]
+       end
+
+       subgraph "Read Path"
+           Query["👤 User Query"]
+           NewModel["🔢 Embed with\nNEW model (v2)"]
+           NewSearch["🔍 Search only\nin v2 collection"]
+           Results["📦 Results from v2\n(higher quality)"]
+       end
+
+       subgraph "Backfill"
+           Backfill["🔁 Re-embed all\nold documents"]
+           Switch["✅ Cut over —\ndelete v1 collection"]
+       end
+
+       NewDocs -->|"Split text"| DualEmbed
+       DualEmbed -->|"v1 vector"| DualStore
+       DualEmbed -->|"v2 vector"| DualStore
+
+       Query -->|"Encode"| NewModel
+       NewModel -->|"Query v2"| NewSearch
+       NewSearch -->|"Results"| Results
+
+       Backfill -->|"Batch re-embed"| Switch
+
+       style NewDocs fill:#e3f2fd,stroke:#333
+       style Query fill:#e3f2fd,stroke:#333
+       style Results fill:#e8f5e5,stroke:#333
+       style Switch fill:#e8f5e5,stroke:#333
+style DualStore fill:#fff3e0,stroke:#333
+```
 
 2. **Namespace collections**:
-   ```
-   Collection "docs_v1" (old model)
-   Collection "docs_v2" (new model)
+   ```mermaid
+   flowchart LR
+       subgraph "Version 1 (Old Model)"
+           V1["📚 Collection: docs_v1\n(model: sbert all-MiniLM-L6-v2,\n384-dim, cosine)"]
+           V1Docs["📄 100,000 documents\n(all embedded with v1)"]
+       end
+
+       subgraph "Version 2 (New Model)"
+           V2["📚 Collection: docs_v2\n(model: text-embedding-ada-002,\n1536-dim, cosine)"]
+           V2Docs["📄 0 documents\n(being backfilled)"]
+       end
+
+       subgraph "Routing Layer"
+           Router["🔄 API Router\nroutes query →\nappropriate collection"]
+       end
+
+       Router -->|"new queries → v2"| V2
+       Router -.->|"fallback if v2 empty"| V1
+
+       V1 --> V1Docs
+       V2 --> V2Docs
+
+       style V1 fill:#fff3e0,stroke:#333
+       style V2 fill:#e8f5e5,stroke:#333
+       style Router fill:#f5f5f5,stroke:#333
    ```
 
 3. **Zero-downtime rollout**:
