@@ -1,0 +1,31 @@
+# Taste Profile
+- Understands existing code thoroughly before making any changes — "Do not immediately rewrite, restructure, or replace the existing implementation." Confidence: 0.95
+- Prefers incremental improvements over rewrites — "Do not rewrite the project unnecessarily", "Preserve working functionality." Confidence: 0.9
+- Avoids unnecessary frameworks (explicitly rejects LangChain, LangGraph, LlamaIndex) — "Do not hide important concepts behind abstractions." Confidence: 0.95
+- Prefers simple, explicit implementations before framework-heavy abstractions — "implement a simple explicit agent loop rather than hiding everything behind a framework." Confidence: 0.95
+- Keeps implementations easy to understand — "Do not over-engineer the POC." Confidence: 0.9
+- Insists on clear conceptual distinctions — does not call something an "agent" merely because it uses an LLM; distinguishes LLM app / workflow / agent / multi-agent. Confidence: 0.9
+- Requires type hints throughout the codebase. Confidence: 0.85
+- Demands clear separation of responsibilities between modules. Confidence: 0.85
+- Uses Pydantic models for all data structures and API contracts. Confidence: 0.9
+- Centralizes configuration management in a single settings module (pydantic-settings). Confidence: 0.8
+- Logging configuration (level, format, destination) must be env-driven (e.g. LOG_LEVEL, LOG_FORMAT) rather than hardcoded into source. Confidence: 0.85
+- Expects proper error handling, logging, retry handling, and timeouts in all code. Confidence: 0.85
+- Requires both unit tests and integration tests for every component. Confidence: 0.9
+- Documentation must cover both theory and implementation for every concept. Confidence: 0.9
+- For each major concept, documentation follows a fixed structure: explain concept → why it exists → how it works → where it fits in architecture → example → implementation → explain implementation → alternatives → trade-offs → interview questions. Confidence: 0.9
+- Documentation should not just describe what the code does — it must explain the underlying concepts. Confidence: 0.85
+- Every enhancement must have an explicit learning objective. Confidence: 0.85
+- Does not expose or depend on hidden chain-of-thought — planning/reasoning must be observable. Confidence: 0.9
+- Requires execution tracing/observability — every agent decision (LLM calls, tool calls, state transitions) must be traceable and inspectable for debugging. Confidence: 0.85
+- Application enforces security boundaries that the LLM cannot bypass — "LLM decides WHAT; Application decides WHAT IS ALLOWED." Confidence: 0.9
+- Requires tool permission boundaries (allow-lists), input/output validation, sandboxing, rate limits, and maximum iteration limits as guardrails. Confidence: 0.85
+- Repository must serve as a dual-purpose resource: a learning project AND interview preparation material. Confidence: 0.95
+- Learning is prioritized through hands-on experiments, each structured as: objective → hypothesis → architecture → implementation → input → execution → result → observations → trade-offs → key takeaway. Confidence: 0.85
+- Empirically tests running services by hitting each API endpoint one-by-one via curl against the live container, then immediately fixes failures — trusts runtime behavior over code inspection alone. Confidence: 0.85
+- Prefers small, targeted, granular edits (many focused `edit_file` operations) over large single-pass rewrites at the code-edit level. Confidence: 0.8
+- Prefers intuitive/conventional API request body shapes (e.g. `{"documents": [...]}` wrapper) over bare arrays, to avoid confusing 422 validation errors for API consumers. Confidence: 0.85
+- Self-documentation must stay accurate: endpoint listings and API references must reflect the actual routes and capabilities of the running service (including newly added endpoints like `/chat/stream` and `/rag/ingest`). Confidence: 0.8
+- Documentation promises must be fulfilled by the implementation: if docs/spec advertise specific streaming events (`tool_call`, `tool_result`, `step`, `token`), the endpoint should emit them, not a reduced set. Confidence: 0.75
+- Before declaring an API/endpoint correct, verifies implementation fidelity by inspecting the actual route handlers and Pydantic model definitions to confirm that advertised capabilities (body overrides, request fields, stream events) genuinely exist in code — trusting source/runtime over documentation assumptions. Confidence: 0.75
+- Prefers Mermaid diagrams over ASCII art diagrams for architecture/flow visualization in documentation, valuing Mermaid's structured, renderable format. Confidence: 0.65

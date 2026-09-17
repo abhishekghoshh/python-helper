@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Shell(.venv/bin/python:*)",
+      "Shell(cd /Users/abhishekghosh/Desktop/projects/personal/python-helper/projects/agentic-ai-poc && cat .venv/lib/python3.14/site-packages/mkdocs_mermaid2_plugin-*.dist-info/entry_points.txt 2>/dev/null || find .venv -path \"*mermaid2*\" -name \"entry_points.txt\" -exec cat {} \\; 2>/dev/null; echo \"---METADATA---\"; find .venv -path \"*mermaid2*\" -name \"METADATA\" -exec grep -i \"name\\|version\" {} \\; 2>/dev/null | head -5)",
+      "Shell(cd /Users/abhishekghosh/Desktop/projects/personal/python-helper/projects/agentic-ai-poc && ls site/architecture/diagrams/ 2>/dev/null; echo \"===\"; grep -c \"mermaid\" site/architecture/diagrams*.html 2>/dev/null; echo \"===\"; grep -rl \"mermaid\" site/ 2>/dev/null | head -5)",
+      "Shell(curl -s -w \\nHTTP %{http_code}\\n http://localhost:8000/)",
+      "Shell(curl -s -w \\nHTTP %{http_code}\\n http://localhost:8000/api/v1/health)",
+      "Shell(echo:*)",
+      "Shell(curl -s -w \\nHTTP %{http_code}\\n -X POST http://localhost:8000/api/v1/rag/ingest -H Content-Type: application/json -d [{\"id\":\"doc-1\",\"content\":\"CommandCode is an AI coding agent that runs in your terminal and helps with software engineering tasks. It supports skills, agents, MCP servers, and mods.\",\"metadata\":{\"source\":\"about\"}},{\"content\":\"The ReAct pattern stands for Reason and Act. An agent observes, reasons, acts by calling tools, and observes the results.\"}])",
+      "Shell(cat > \"$COMMANDCODE_SCRATCHPAD/test_ingest3.py\" <<'PYEOF' import os, time os.environ.setdefault(\"API_URL\", \"http://localhost:8000\") from streamlit.testing.v1 import AppTest APP = \"/Users/abhishekghosh/Desktop/projects/personal/python-helper/projects/agentic-ai-poc/streamlit_app.py\" at = AppTest.from_file(APP).run() print(\"text_inputs:\", len(at.sidebar.text_input), \"| buttons:\", len(at.sidebar.button)) # text_input[0]=API base URL (leave default), text_input[1]=Document ID at.sidebar.text_area[0].set_value(\"The capital of France is Paris.\") at.sidebar.text_input[1].set_value(\"paris-doc\") at.run() # apply widget values at.sidebar.button[2].click() # Ingest at.run() for _ in range(20): if list(at.exception): break if any(\"Ingested\" in (s.value or \"\") or \"chunk\" in (s.value or \"\") for s in at.sidebar.success): break time.sleep(1); at.run() print(\"exc:\", [(getattr(e,'message',e)) for e in at.exception]) for s in at.sidebar.success: print(\"OK:\", s.value) for e in at.sidebar.error: print(\"ERR:\", getattr(e,'value',e)) for w in at.sidebar.warning: print(\"WARN:\", getattr(w,'value',w)) print(\"ingest_success:\", any(\"Ingested\" in (s.value or \"\") or \"chunk\" in (s.value or \"\") for s in at.sidebar.success)) PYEOF .venv/bin/python \"$COMMANDCODE_SCRATCHPAD/test_ingest3.py\" 2>&1 | grep -v \"ScriptRunContext\\|missing ScriptRun\\|Thread '\" | tail -10)"
+    ],
+    "deny": [],
+    "defaultMode": "default"
+  }
+}

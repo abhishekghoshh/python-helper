@@ -1,0 +1,27 @@
+FROM python:3.12-slim
+
+WORKDIR /app
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PYTHONPATH=/app
+
+# Install docs dependencies directly (no Poetry needed for docs builds)
+RUN pip install --no-cache-dir \
+    "mkdocs>=1.6.0" \
+    "mkdocs-material>=9.5.0" \
+    "mkdocstrings[python]>=0.26.0" \
+    "mkdocs-mermaid2-plugin>=1.2.3" \
+    "pymdown-extensions>=10.0"
+
+# Copy documentation and configuration
+COPY docs/ ./docs/
+COPY mkdocs.yml ./
+
+# Copy app source (for mkdocstrings source code references)
+COPY app/ ./app/
+
+EXPOSE 8000
+
+CMD ["mkdocs", "serve", "--dev-addr=0.0.0.0:8000"]

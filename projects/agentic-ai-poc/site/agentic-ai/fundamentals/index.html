@@ -1,0 +1,1773 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="A hands-on learning laboratory for AI agents — theory, implementation, experiments, and interview preparation" name="description"/>
+<link href="../../project/enhancement-plan/" rel="prev"/>
+<link href="../classification/" rel="next"/>
+<link href="../../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.7.7" name="generator"/>
+<title>What is Agentic AI? - Agentic AI POC</title>
+<link href="../../assets/stylesheets/main.ec1eaa64.min.css" rel="stylesheet"/>
+<link href="../../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<link href="../../assets/_mkdocstrings.css" rel="stylesheet"/>
+<script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body data-md-color-accent="blue" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#what-is-agentic-ai">
+          Skip to content
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<div data-md-color-scheme="default" data-md-component="outdated" hidden="">
+</div>
+<header class="md-header" data-md-component="header">
+<nav aria-label="Header" class="md-header__inner md-grid">
+<a aria-label="Agentic AI POC" class="md-header__button md-logo" data-md-component="logo" href="../.." title="Agentic AI POC">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            Agentic AI POC
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              What is Agentic AI?
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="Switch to dark mode" class="md-option" data-md-color-accent="blue" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="default" id="__palette_0" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="Switch to dark mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"></path></svg>
+</label>
+<input aria-label="Switch to light mode" class="md-option" data-md-color-accent="blue" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="slate" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_0" hidden="" title="Switch to light mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"></path></svg>
+</label>
+</form>
+<script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="Search" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="Search" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</label>
+<nav aria-label="Search" class="md-search__options">
+<button aria-label="Clear" class="md-search__icon md-icon" tabindex="-1" title="Clear" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            Initializing search
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="md-header__source">
+<a class="md-source" data-md-component="source" href="https://github.com/abhishekghoshh/python-helper" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+</div>
+<div class="md-source__repository">
+    python-helper (agentic-ai-poc)
+  </div>
+</a>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<nav aria-label="Tabs" class="md-tabs" data-md-component="tabs">
+<div class="md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../..">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../api-reference/">
+        
+  
+  
+    
+  
+  API Reference
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../project/project-analysis/">
+          
+  
+  
+  Project Analysis
+
+        </a>
+</li>
+<li class="md-tabs__item md-tabs__item--active">
+<a class="md-tabs__link" href="./">
+          
+  
+  
+  Agentic AI Fundamentals
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../architecture/agent-architecture/">
+          
+  
+  
+  Components
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../experiments/agent-loop/">
+          
+  
+  
+  Experiments
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../interview-preparation/beginner/">
+          
+  
+  
+  Interview Preparation
+
+        </a>
+</li>
+</ul>
+</div>
+</nav>
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Navigation" class="md-nav md-nav--primary md-nav--lifted" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="Agentic AI POC" class="md-nav__button md-logo" data-md-component="logo" href="../.." title="Agentic AI POC">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+    Agentic AI POC
+  </label>
+<div class="md-nav__source">
+<a class="md-source" data-md-component="source" href="https://github.com/abhishekghoshh/python-helper" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+</div>
+<div class="md-source__repository">
+    python-helper (agentic-ai-poc)
+  </div>
+</a>
+</div>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../..">
+<span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../api-reference/">
+<span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Project Analysis
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Project Analysis
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../project/project-analysis/">
+<span class="md-ellipsis">
+    
+  
+    Project Analysis
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../project/enhancement-plan/">
+<span class="md-ellipsis">
+    
+  
+    Enhancement Plan
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+<span class="md-ellipsis">
+    
+  
+    Agentic AI Fundamentals
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_4_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Agentic AI Fundamentals
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+<span class="md-ellipsis">
+    
+  
+    What is Agentic AI?
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+<span class="md-ellipsis">
+    
+  
+    What is Agentic AI?
+  
+
+    
+  </span>
+</a>
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#table-of-contents">
+<span class="md-ellipsis">
+      
+        Table of Contents
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#what-is-agentic-ai_1">
+<span class="md-ellipsis">
+      
+        What is Agentic AI?
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#what-is-an-ai-agent">
+<span class="md-ellipsis">
+      
+        What is an AI Agent?
+      
+    </span>
+</a>
+<nav aria-label="What is an AI Agent?" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#classic-definition-russell-norvig">
+<span class="md-ellipsis">
+      
+        Classic definition (Russell &amp; Norvig)
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#the-agent-in-this-poc">
+<span class="md-ellipsis">
+      
+        The agent in this POC
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#what-makes-an-application-agentic">
+<span class="md-ellipsis">
+      
+        What makes an application "agentic"?
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#llm-vs-ai-agent">
+<span class="md-ellipsis">
+      
+        LLM vs. AI Agent
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#llm-application-vs-agent">
+<span class="md-ellipsis">
+      
+        LLM Application vs. Agent
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#workflow-vs-agent">
+<span class="md-ellipsis">
+      
+        Workflow vs. Agent
+      
+    </span>
+</a>
+<nav aria-label="Workflow vs. Agent" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#llm-workflow-deterministic">
+<span class="md-ellipsis">
+      
+        LLM Workflow (deterministic)
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#ai-agent-autonomous">
+<span class="md-ellipsis">
+      
+        AI Agent (autonomous)
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#decision-tree">
+<span class="md-ellipsis">
+      
+        Decision tree
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#in-this-poc">
+<span class="md-ellipsis">
+      
+        In this POC
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#single-agent-vs-multi-agent">
+<span class="md-ellipsis">
+      
+        Single-Agent vs. Multi-Agent
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#autonomous-vs-deterministic">
+<span class="md-ellipsis">
+      
+        Autonomous vs. Deterministic
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#reactive-vs-planning-agents">
+<span class="md-ellipsis">
+      
+        Reactive vs. Planning Agents
+      
+    </span>
+</a>
+<nav aria-label="Reactive vs. Planning Agents" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#reactive-agents">
+<span class="md-ellipsis">
+      
+        Reactive agents
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#planning-agents">
+<span class="md-ellipsis">
+      
+        Planning agents
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#react-is-a-hybrid">
+<span class="md-ellipsis">
+      
+        ReAct is a hybrid
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#visualization">
+<span class="md-ellipsis">
+      
+        Visualization
+      
+    </span>
+</a>
+<nav aria-label="Visualization" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#traditional-llm-application">
+<span class="md-ellipsis">
+      
+        Traditional LLM application
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#agentic-application">
+<span class="md-ellipsis">
+      
+        Agentic application
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#interview-questions">
+<span class="md-ellipsis">
+      
+        Interview Questions
+      
+    </span>
+</a>
+<nav aria-label="Interview Questions" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#short-answer">
+<span class="md-ellipsis">
+      
+        Short answer
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#detailed-explanation">
+<span class="md-ellipsis">
+      
+        Detailed explanation
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#follow-up-questions">
+<span class="md-ellipsis">
+      
+        Follow-up questions
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#common-mistakes">
+<span class="md-ellipsis">
+      
+        Common mistakes
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../classification/">
+<span class="md-ellipsis">
+    
+  
+    LLM App vs Agent vs Workflow
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_5" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Components
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_5_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_5">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Components
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../architecture/agent-architecture/">
+<span class="md-ellipsis">
+    
+  
+    Agent Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../architecture/agent-loop/">
+<span class="md-ellipsis">
+    
+  
+    Agent Loop
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../architecture/diagrams/">
+<span class="md-ellipsis">
+    
+  
+    Component Diagrams
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../architecture/tool-calling/">
+<span class="md-ellipsis">
+    
+  
+    Tool Calling
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../architecture/planning/">
+<span class="md-ellipsis">
+    
+  
+    Planning &amp; Reasoning
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../architecture/memory/">
+<span class="md-ellipsis">
+    
+  
+    Memory
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../architecture/state/">
+<span class="md-ellipsis">
+    
+  
+    State
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../architecture/rag-agents/">
+<span class="md-ellipsis">
+    
+  
+    RAG + Agents
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../architecture/multi-agent/">
+<span class="md-ellipsis">
+    
+  
+    Multi-Agent
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../architecture/orchestration/">
+<span class="md-ellipsis">
+    
+  
+    Orchestration
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../architecture/human-in-the-loop/">
+<span class="md-ellipsis">
+    
+  
+    Human-in-the-Loop
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../architecture/security/">
+<span class="md-ellipsis">
+    
+  
+    Guardrails &amp; Security
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../architecture/evaluation/">
+<span class="md-ellipsis">
+    
+  
+    Evaluation
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../architecture/observability/">
+<span class="md-ellipsis">
+    
+  
+    Observability
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_6" type="checkbox"/>
+<label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Experiments
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_6_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_6">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Experiments
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../experiments/agent-loop/">
+<span class="md-ellipsis">
+    
+  
+    Agent Loop
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../experiments/tool-selection/">
+<span class="md-ellipsis">
+    
+  
+    Tool Selection
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../experiments/planning-strategies/">
+<span class="md-ellipsis">
+    
+  
+    Planning Strategies
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../experiments/memory/">
+<span class="md-ellipsis">
+    
+  
+    Memory
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../experiments/rag-agent/">
+<span class="md-ellipsis">
+    
+  
+    RAG Agent
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../experiments/multi-agent/">
+<span class="md-ellipsis">
+    
+  
+    Multi-Agent
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../experiments/human-in-the-loop/">
+<span class="md-ellipsis">
+    
+  
+    Human-in-the-Loop
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../experiments/agent-evaluation/">
+<span class="md-ellipsis">
+    
+  
+    Agent Evaluation
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_7" type="checkbox"/>
+<label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Interview Preparation
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_7_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_7">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Interview Preparation
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../interview-preparation/beginner/">
+<span class="md-ellipsis">
+    
+  
+    Beginner
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../interview-preparation/intermediate/">
+<span class="md-ellipsis">
+    
+  
+    Intermediate
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../interview-preparation/advanced/">
+<span class="md-ellipsis">
+    
+  
+    Advanced
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../interview-preparation/system-design/">
+<span class="md-ellipsis">
+    
+  
+    System Design
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../interview-preparation/scenarios/">
+<span class="md-ellipsis">
+    
+  
+    Scenarios
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#table-of-contents">
+<span class="md-ellipsis">
+      
+        Table of Contents
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#what-is-agentic-ai_1">
+<span class="md-ellipsis">
+      
+        What is Agentic AI?
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#what-is-an-ai-agent">
+<span class="md-ellipsis">
+      
+        What is an AI Agent?
+      
+    </span>
+</a>
+<nav aria-label="What is an AI Agent?" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#classic-definition-russell-norvig">
+<span class="md-ellipsis">
+      
+        Classic definition (Russell &amp; Norvig)
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#the-agent-in-this-poc">
+<span class="md-ellipsis">
+      
+        The agent in this POC
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#what-makes-an-application-agentic">
+<span class="md-ellipsis">
+      
+        What makes an application "agentic"?
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#llm-vs-ai-agent">
+<span class="md-ellipsis">
+      
+        LLM vs. AI Agent
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#llm-application-vs-agent">
+<span class="md-ellipsis">
+      
+        LLM Application vs. Agent
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#workflow-vs-agent">
+<span class="md-ellipsis">
+      
+        Workflow vs. Agent
+      
+    </span>
+</a>
+<nav aria-label="Workflow vs. Agent" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#llm-workflow-deterministic">
+<span class="md-ellipsis">
+      
+        LLM Workflow (deterministic)
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#ai-agent-autonomous">
+<span class="md-ellipsis">
+      
+        AI Agent (autonomous)
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#decision-tree">
+<span class="md-ellipsis">
+      
+        Decision tree
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#in-this-poc">
+<span class="md-ellipsis">
+      
+        In this POC
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#single-agent-vs-multi-agent">
+<span class="md-ellipsis">
+      
+        Single-Agent vs. Multi-Agent
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#autonomous-vs-deterministic">
+<span class="md-ellipsis">
+      
+        Autonomous vs. Deterministic
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#reactive-vs-planning-agents">
+<span class="md-ellipsis">
+      
+        Reactive vs. Planning Agents
+      
+    </span>
+</a>
+<nav aria-label="Reactive vs. Planning Agents" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#reactive-agents">
+<span class="md-ellipsis">
+      
+        Reactive agents
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#planning-agents">
+<span class="md-ellipsis">
+      
+        Planning agents
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#react-is-a-hybrid">
+<span class="md-ellipsis">
+      
+        ReAct is a hybrid
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#visualization">
+<span class="md-ellipsis">
+      
+        Visualization
+      
+    </span>
+</a>
+<nav aria-label="Visualization" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#traditional-llm-application">
+<span class="md-ellipsis">
+      
+        Traditional LLM application
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#agentic-application">
+<span class="md-ellipsis">
+      
+        Agentic application
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#interview-questions">
+<span class="md-ellipsis">
+      
+        Interview Questions
+      
+    </span>
+</a>
+<nav aria-label="Interview Questions" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#short-answer">
+<span class="md-ellipsis">
+      
+        Short answer
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#detailed-explanation">
+<span class="md-ellipsis">
+      
+        Detailed explanation
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#follow-up-questions">
+<span class="md-ellipsis">
+      
+        Follow-up questions
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#common-mistakes">
+<span class="md-ellipsis">
+      
+        Common mistakes
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<h1 id="what-is-agentic-ai">What is Agentic AI?<a class="headerlink" href="#what-is-agentic-ai" title="Permanent link">¶</a></h1>
+<blockquote>
+<p><strong>Goal of this page:</strong> By the end, you should be able to explain what an AI
+agent is, how it differs from a simple LLM application, and why the
+"agent loop" is the defining characteristic.</p>
+</blockquote>
+<hr/>
+<h2 id="table-of-contents">Table of Contents<a class="headerlink" href="#table-of-contents" title="Permanent link">¶</a></h2>
+<ol>
+<li><a href="#what-is-agentic-ai">What is Agentic AI?</a></li>
+<li><a href="#what-is-an-ai-agent">What is an AI Agent?</a></li>
+<li><a href="#what-makes-an-application-agentic">What makes an application "agentic"?</a></li>
+<li><a href="#llm-vs-ai-agent">LLM vs. AI Agent</a></li>
+<li><a href="#llm-application-vs-agent">LLM Application vs. Agent</a></li>
+<li><a href="#workflow-vs-agent">Workflow vs. Agent</a></li>
+<li><a href="#single-agent-vs-multi-agent">Single-Agent vs. Multi-Agent</a></li>
+<li><a href="#autonomous-vs-deterministic">Autonomous vs. Deterministic</a></li>
+<li><a href="#reactive-vs-planning-agents">Reactive vs. Planning Agents</a></li>
+<li><a href="#visualization">Visualization</a></li>
+<li><a href="#interview-questions">Interview Questions</a></li>
+</ol>
+<hr/>
+<h2 id="what-is-agentic-ai_1">What is Agentic AI?<a class="headerlink" href="#what-is-agentic-ai_1" title="Permanent link">¶</a></h2>
+<p><strong>Agentic AI</strong> refers to AI systems that can <strong>autonomously</strong> perceive their
+environment, <strong>reason</strong> about goals, <strong>plan</strong> a sequence of actions, and
+<strong>act</strong> — using tools — to achieve those goals. The word "agentic" captures
+the quality of <strong>agency</strong>: the ability to act as an autonomous entity rather
+than a passive responder.</p>
+<p>The "AI" part is typically (but not necessarily) an LLM. What makes it
+agentic is not the intelligence model itself, but the <strong>architecture</strong> around
+it: a loop of observation, reasoning, action, and feedback.</p>
+<hr/>
+<h2 id="what-is-an-ai-agent">What is an AI Agent?<a class="headerlink" href="#what-is-an-ai-agent" title="Permanent link">¶</a></h2>
+<p>An <strong>AI agent</strong> is a system that:</p>
+<ol>
+<li><strong>Perceives</strong> its environment (through messages, tool results, memory).</li>
+<li><strong>Reasons</strong> about what to do next (using an LLM or other decision maker).</li>
+<li><strong>Acts</strong> by calling tools, making requests, or modifying state.</li>
+<li><strong>Observes</strong> the results of those actions.</li>
+<li><strong>Repeats</strong> the cycle until the goal is achieved.</li>
+</ol>
+<h3 id="classic-definition-russell-norvig">Classic definition (Russell &amp; Norvig)<a class="headerlink" href="#classic-definition-russell-norvig" title="Permanent link">¶</a></h3>
+<blockquote>
+<p>An agent is <strong>anything that can be viewed as perceiving its environment
+through sensors and acting upon that environment through actuators</strong>.</p>
+</blockquote>
+<p>In software, this translates to:</p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Sensors</strong></td>
+<td>The inputs the agent receives (user messages, tool results, memory)</td>
+</tr>
+<tr>
+<td><strong>Actuators</strong></td>
+<td>The actions the agent takes (tool calls, API requests, state changes)</td>
+</tr>
+<tr>
+<td><strong>Agent program</strong></td>
+<td>The algorithm that maps percepts to actions (the LLM + loop)</td>
+</tr>
+<tr>
+<td><strong>Environment</strong></td>
+<td>Everything the agent interacts with (tools, APIs, memory, the user)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="the-agent-in-this-poc">The agent in this POC<a class="headerlink" href="#the-agent-in-this-poc" title="Permanent link">¶</a></h3>
+<p>The <code>ReActAgent</code> (app/agents/react_agent.py) is a concrete implementation.
+It uses an LLM as its decision-making core and a loop of observe-reason-act
+to solve tasks.</p>
+<hr/>
+<h2 id="what-makes-an-application-agentic">What makes an application "agentic"?<a class="headerlink" href="#what-makes-an-application-agentic" title="Permanent link">¶</a></h2>
+<p>Not every AI-powered application is an agent. A system is <strong>agentic</strong> when it
+has these characteristics:</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Characteristic</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>Iterative loop</strong></td>
+<td>The system can take multiple steps, observing results between each</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>LLM-directed tool selection</strong></td>
+<td>The LLM chooses which tool to call, not hardcoded application code</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>LLM-directed arguments</strong></td>
+<td>The LLM generates the arguments for each tool based on context</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>Observation feedback</strong></td>
+<td>Tool results are fed back to the LLM to inform the next decision</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>Dynamic planning</strong></td>
+<td>The plan can change based on intermediate results</td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>Memory</strong></td>
+<td>Context is retained across turns within a task</td>
+</tr>
+<tr>
+<td>7</td>
+<td><strong>Termination condition</strong></td>
+<td>The agent decides when the goal is achieved (not a fixed step count)</td>
+</tr>
+</tbody>
+</table>
+<p>A system missing <strong>any</strong> of these is an LLM application or workflow, not an
+agent. In particular, an LLM that calls the <em>same</em> fixed sequence of tools
+every time (e.g., always retrieve-then-generate) is a <strong>workflow</strong>, not an
+agent.</p>
+<hr/>
+<h2 id="llm-vs-ai-agent">LLM vs. AI Agent<a class="headerlink" href="#llm-vs-ai-agent" title="Permanent link">¶</a></h2>
+<pre class="mermaid"><code>graph LR
+    subgraph "LLM Application"
+        A1["Prompt"] --&gt; A2["LLM"]
+        A2 --&gt; A3["Response"]
+    end
+
+    subgraph "AI Agent"
+        B1["Goal"] --&gt; B2["Agent"]
+        B2 --&gt; B3["Understand Goal"]
+        B3 --&gt; B4["Plan"]
+        B4 --&gt; B5["Choose Tool"]
+        B5 --&gt; B6["Execute Tool"]
+        B6 --&gt; B7["Observe Result"]
+        B7 --&gt; B8["Reason"]
+        B8 --&gt; B9{"Done?"}
+        B9 --&gt;|No| B3
+        B9 --&gt;|Yes| B10["Final Answer"]
+    end
+</code></pre>
+<p><strong>LLM Application:</strong> One-shot. Prompt in, response out. No loop, no tools,
+no memory beyond the single prompt.</p>
+<p><strong>AI Agent:</strong> Cyclical. The agent keeps going until the goal is met, using
+tools and reasoning at each step.</p>
+<hr/>
+<h2 id="llm-application-vs-agent">LLM Application vs. Agent<a class="headerlink" href="#llm-application-vs-agent" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>LLM Application</th>
+<th>AI Agent</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Flow</strong></td>
+<td>Single prompt → response</td>
+<td>Observe → reason → act → observe → …</td>
+</tr>
+<tr>
+<td><strong>Tools</strong></td>
+<td>None (or fixed pipeline)</td>
+<td>Dynamically selected by the LLM</td>
+</tr>
+<tr>
+<td><strong>Planning</strong></td>
+<td>None (the prompt is the plan)</td>
+<td>Explicit or implicit plan, can be revised</td>
+</tr>
+<tr>
+<td><strong>Memory</strong></td>
+<td>None (each request is fresh)</td>
+<td>Retains context across steps</td>
+</tr>
+<tr>
+<td><strong>Adaptability</strong></td>
+<td>Fixed behavior per prompt</td>
+<td>Adapts based on tool results</td>
+</tr>
+<tr>
+<td><strong>Failure recovery</strong></td>
+<td>None (if the answer is wrong, start over)</td>
+<td>Can retry, try a different tool, or self-correct</td>
+</tr>
+<tr>
+<td><strong>Latency</strong></td>
+<td>One LLM call</td>
+<td>Multiple LLM calls (higher, but more capable)</td>
+</tr>
+<tr>
+<td><strong>Use when</strong></td>
+<td>Simple Q&amp;A, classification, summarization</td>
+<td>Multi-step tasks that need tools</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="workflow-vs-agent">Workflow vs. Agent<a class="headerlink" href="#workflow-vs-agent" title="Permanent link">¶</a></h2>
+<p>This distinction is <strong>crucial</strong> and often confused in interviews.</p>
+<h3 id="llm-workflow-deterministic">LLM Workflow (deterministic)<a class="headerlink" href="#llm-workflow-deterministic" title="Permanent link">¶</a></h3>
+<p>A workflow is a <strong>pre-defined sequence</strong> of steps. The application code
+decides what happens at each step.</p>
+<div class="highlight"><pre><span></span><code>Step 1: Retrieve documents (always)
+Step 2: Generate answer (always)
+Step 3: Return response (always)
+</code></pre></div>
+<p>Example: A RAG pipeline that always does <code>retrieve(k=5) → generate()</code>. The LLM
+never decides whether to retrieve, what to retrieve, or whether to try again.
+It's a fixed function: <code>f(query) = generate(retrieve(query))</code>.</p>
+<h3 id="ai-agent-autonomous">AI Agent (autonomous)<a class="headerlink" href="#ai-agent-autonomous" title="Permanent link">¶</a></h3>
+<p>An agent uses an <strong>LLM to decide</strong> what to do at each step. The sequence is
+emergent, not pre-defined.</p>
+<div class="highlight"><pre><span></span><code>Step 1: LLM decides — "I need to search the web"
+Step 2: Tool executes → result
+Step 3: LLM decides — "I need to calculate something"
+Step 4: Tool executes → result
+Step 5: LLM decides — "I have enough info, answer the user"
+</code></pre></div>
+<h3 id="decision-tree">Decision tree<a class="headerlink" href="#decision-tree" title="Permanent link">¶</a></h3>
+<pre class="mermaid"><code>graph TD
+    A["Does the system loop?"] --&gt;|No| B["LLM Application"]
+    A --&gt;|Yes| C["Does the LLM choose tools?"]
+    C --&gt;|No| D["LLM Workflow"]
+    C --&gt;|Yes| E["AI Agent"]
+    E --&gt; F["Single-agent"]
+    F --&gt;|or| G["Multi-agent"]
+</code></pre>
+<h3 id="in-this-poc">In this POC<a class="headerlink" href="#in-this-poc" title="Permanent link">¶</a></h3>
+<p>The existing RAG pipeline (<a href="../../project/project-analysis/">see project analysis</a>)
+is a <strong>workflow</strong>: retrieve → generate. The new <code>ReActAgent</code> is an <strong>agent</strong>:
+it loops, calls tools dynamically, and adapts.</p>
+<hr/>
+<h2 id="single-agent-vs-multi-agent">Single-Agent vs. Multi-Agent<a class="headerlink" href="#single-agent-vs-multi-agent" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Single Agent</th>
+<th>Multi-Agent</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Components</strong></td>
+<td>One decision maker</td>
+<td>Multiple agents</td>
+</tr>
+<tr>
+<td><strong>Coordination</strong></td>
+<td>Internal (memory, planning)</td>
+<td>Explicit (communication, delegation)</td>
+</tr>
+<tr>
+<td><strong>Specialization</strong></td>
+<td>One LLM, multiple tools</td>
+<td>Multiple specialized LLMs</td>
+</tr>
+<tr>
+<td><strong>Complexity</strong></td>
+<td>Lower</td>
+<td>Higher</td>
+</tr>
+<tr>
+<td><strong>Use when</strong></td>
+<td>Most tasks</td>
+<td>Very complex tasks requiring different skills</td>
+</tr>
+</tbody>
+</table>
+<p>In this POC we start with a <strong>single agent</strong> (the ReAct agent). Multi-agent
+patterns are documented in <a href="../../architecture/multi-agent/">Multi-Agent Systems</a>
+and demonstrated in the <a href="../../experiments/multi-agent/">experiments</a>.</p>
+<hr/>
+<h2 id="autonomous-vs-deterministic">Autonomous vs. Deterministic<a class="headerlink" href="#autonomous-vs-deterministic" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Autonomous Agent</th>
+<th>Deterministic System</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Decision making</strong></td>
+<td>LLM chooses actions</td>
+<td>Pre-defined rules / fixed pipeline</td>
+</tr>
+<tr>
+<td><strong>Tool selection</strong></td>
+<td>Dynamic</td>
+<td>Static</td>
+</tr>
+<tr>
+<td><strong>Execution path</strong></td>
+<td>Emergent</td>
+<td>Pre-determined</td>
+</tr>
+<tr>
+<td><strong>Reproducibility</strong></td>
+<td>Low (LLM is stochastic)</td>
+<td>High</td>
+</tr>
+<tr>
+<td><strong>Flexibility</strong></td>
+<td>High</td>
+<td>Low</td>
+</tr>
+<tr>
+<td><strong>Debugging</strong></td>
+<td>Harder (non-deterministic)</td>
+<td>Easier (traceable)</td>
+</tr>
+</tbody>
+</table>
+<p>Most real-world agents are <strong>somewhere in between</strong> — they use deterministic
+guardrails (max iterations, tool allow-lists) to constrain autonomous behavior.</p>
+<hr/>
+<h2 id="reactive-vs-planning-agents">Reactive vs. Planning Agents<a class="headerlink" href="#reactive-vs-planning-agents" title="Permanent link">¶</a></h2>
+<h3 id="reactive-agents">Reactive agents<a class="headerlink" href="#reactive-agents" title="Permanent link">¶</a></h3>
+<p>React directly to observations without maintaining an internal plan.</p>
+<div class="highlight"><pre><span></span><code>Observe → Match pattern → Act → Observe → …
+</code></pre></div>
+<ul>
+<li>Fast, simple, no lookahead</li>
+<li>Can get stuck in loops</li>
+<li>Common in simple chatbots</li>
+</ul>
+<h3 id="planning-agents">Planning agents<a class="headerlink" href="#planning-agents" title="Permanent link">¶</a></h3>
+<p>Build and maintain a plan before acting.</p>
+<div class="highlight"><pre><span></span><code>Goal → Sub-goal 1 → Action → Sub-goal 2 → Action → … → Verify → Done
+</code></pre></div>
+<ul>
+<li>Slower (upfront planning cost)</li>
+<li>Better for complex, multi-step tasks</li>
+<li>Can recover from partial failures</li>
+<li>Common in advanced agents (ReAct, Reflexion)</li>
+</ul>
+<h3 id="react-is-a-hybrid">ReAct is a hybrid<a class="headerlink" href="#react-is-a-hybrid" title="Permanent link">¶</a></h3>
+<p>ReAct combines reactive (think-act-observe loop) with planning (the reasoning
+step acts as lightweight planning). It doesn't build an explicit plan
+upfront but reasons step-by-step, which implicitly plans.</p>
+<hr/>
+<h2 id="visualization">Visualization<a class="headerlink" href="#visualization" title="Permanent link">¶</a></h2>
+<h3 id="traditional-llm-application">Traditional LLM application<a class="headerlink" href="#traditional-llm-application" title="Permanent link">¶</a></h3>
+<div class="highlight"><pre><span></span><code>User
+  ↓
+Prompt
+  ↓
+LLM
+  ↓
+Response
+</code></pre></div>
+<h3 id="agentic-application">Agentic application<a class="headerlink" href="#agentic-application" title="Permanent link">¶</a></h3>
+<div class="highlight"><pre><span></span><code>User
+  ↓
+Agent
+  ↓
+Understand Goal
+  ↓
+Plan
+  ↓
+Choose Tool
+  ↓
+Execute Tool
+  ↓
+Observe Result
+  ↓
+Reason
+  ↓
+Continue / Stop
+  ↓
+Final Answer
+</code></pre></div>
+<p>The key difference: in the agentic model, <strong>the LLM directs the flow</strong>. It
+chooses tools, reasons about results, and decides when to stop. The
+application provides the mechanism; the LLM provides the intelligence.</p>
+<hr/>
+<h2 id="interview-questions">Interview Questions<a class="headerlink" href="#interview-questions" title="Permanent link">¶</a></h2>
+<h3 id="short-answer">Short answer<a class="headerlink" href="#short-answer" title="Permanent link">¶</a></h3>
+<p><strong>Q: What is an AI agent?</strong>
+A: An AI agent is a system that perceives its environment, reasons about
+goals, takes actions (typically via tools), observes the results, and loops
+until the goal is achieved. The key differentiator from an LLM application is
+the iterative loop where the LLM dynamically chooses actions.</p>
+<p><strong>Q: What is Agentic AI?</strong>
+A: Agentic AI refers to AI systems that exhibit agency — the ability to
+act autonomously toward a goal. It's characterized by an agent loop (observe,
+reason, act, observe), dynamic tool selection, and memory.</p>
+<p><strong>Q: What makes an application agentic?</strong>
+A: An iterative loop with LLM-directed tool selection, observation feedback,
+dynamic planning, and memory. The LLM must decide <em>what</em> to do next, not just
+<em>what to say</em>.</p>
+<h3 id="detailed-explanation">Detailed explanation<a class="headerlink" href="#detailed-explanation" title="Permanent link">¶</a></h3>
+<p><strong>Q: How does an AI agent differ from a traditional LLM application?</strong></p>
+<p>A traditional LLM application takes a prompt and returns a response in a
+single pass. There is no feedback loop, no tool calling, and no memory.</p>
+<p>An AI agent adds:</p>
+<ol>
+<li><strong>Tools</strong>: The agent can call functions (search, calculate, read files)
+   to interact with the world. The LLM chooses which tool to call.</li>
+<li><strong>Loop</strong>: After a tool executes, the result is fed back to the LLM, which
+   can call more tools or produce a final answer.</li>
+<li><strong>Memory</strong>: The conversation history and task state persist across turns.</li>
+<li><strong>Planning</strong>: The agent can decompose a task and reason about intermediate
+   steps.</li>
+</ol>
+<p>This allows agents to solve complex, multi-step problems that a single LLM
+call cannot handle.</p>
+<h3 id="follow-up-questions">Follow-up questions<a class="headerlink" href="#follow-up-questions" title="Permanent link">¶</a></h3>
+<ul>
+<li>"When would you NOT use an agent?"</li>
+<li>"What are the downsides of agentic systems?"</li>
+<li>"How do you prevent an agent from going into an infinite loop?"</li>
+<li>"What's the difference between a tool-calling app and an agent?"</li>
+<li>"How does ReAct work?"</li>
+</ul>
+<h3 id="common-mistakes">Common mistakes<a class="headerlink" href="#common-mistakes" title="Permanent link">¶</a></h3>
+<ul>
+<li>Calling any LLM application that uses tools an "agent"</li>
+<li>Confusing a fixed workflow (retrieve → generate) with an agent loop</li>
+<li>Assuming more tools = better agent (quality of reasoning matters more)</li>
+<li>Not designing proper termination conditions</li>
+<li>Ignoring the cost of multiple LLM calls</li>
+</ul>
+</article>
+</div>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+<button class="md-top md-icon" data-md-component="top" hidden="" type="button">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  Back to top
+</button>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "content.code.copy", "content.code.annotate", "content.tooltips", "search.highlight", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+<script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+<script type="module">import mermaid from "https://unpkg.com/mermaid@10.4.0/dist/mermaid.esm.min.mjs";
+window.mermaidConfig = {default: {
+    startOnLoad: false
+}};</script></body>
+</html>

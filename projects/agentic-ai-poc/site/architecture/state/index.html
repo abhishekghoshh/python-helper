@@ -1,0 +1,1511 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="A hands-on learning laboratory for AI agents — theory, implementation, experiments, and interview preparation" name="description"/>
+<link href="../memory/" rel="prev"/>
+<link href="../rag-agents/" rel="next"/>
+<link href="../../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.7.7" name="generator"/>
+<title>State - Agentic AI POC</title>
+<link href="../../assets/stylesheets/main.ec1eaa64.min.css" rel="stylesheet"/>
+<link href="../../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<link href="../../assets/_mkdocstrings.css" rel="stylesheet"/>
+<script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body data-md-color-accent="blue" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#agent-state">
+          Skip to content
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<div data-md-color-scheme="default" data-md-component="outdated" hidden="">
+</div>
+<header class="md-header" data-md-component="header">
+<nav aria-label="Header" class="md-header__inner md-grid">
+<a aria-label="Agentic AI POC" class="md-header__button md-logo" data-md-component="logo" href="../.." title="Agentic AI POC">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            Agentic AI POC
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              State
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="Switch to dark mode" class="md-option" data-md-color-accent="blue" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="default" id="__palette_0" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="Switch to dark mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"></path></svg>
+</label>
+<input aria-label="Switch to light mode" class="md-option" data-md-color-accent="blue" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="slate" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_0" hidden="" title="Switch to light mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"></path></svg>
+</label>
+</form>
+<script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="Search" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="Search" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</label>
+<nav aria-label="Search" class="md-search__options">
+<button aria-label="Clear" class="md-search__icon md-icon" tabindex="-1" title="Clear" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            Initializing search
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="md-header__source">
+<a class="md-source" data-md-component="source" href="https://github.com/abhishekghoshh/python-helper" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+</div>
+<div class="md-source__repository">
+    python-helper (agentic-ai-poc)
+  </div>
+</a>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<nav aria-label="Tabs" class="md-tabs" data-md-component="tabs">
+<div class="md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../..">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../api-reference/">
+        
+  
+  
+    
+  
+  API Reference
+
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../project/project-analysis/">
+          
+  
+  
+  Project Analysis
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../agentic-ai/fundamentals/">
+          
+  
+  
+  Agentic AI Fundamentals
+
+        </a>
+</li>
+<li class="md-tabs__item md-tabs__item--active">
+<a class="md-tabs__link" href="../agent-architecture/">
+          
+  
+  
+  Components
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../experiments/agent-loop/">
+          
+  
+  
+  Experiments
+
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../interview-preparation/beginner/">
+          
+  
+  
+  Interview Preparation
+
+        </a>
+</li>
+</ul>
+</div>
+</nav>
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Navigation" class="md-nav md-nav--primary md-nav--lifted" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="Agentic AI POC" class="md-nav__button md-logo" data-md-component="logo" href="../.." title="Agentic AI POC">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+    Agentic AI POC
+  </label>
+<div class="md-nav__source">
+<a class="md-source" data-md-component="source" href="https://github.com/abhishekghoshh/python-helper" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+</div>
+<div class="md-source__repository">
+    python-helper (agentic-ai-poc)
+  </div>
+</a>
+</div>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../..">
+<span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../api-reference/">
+<span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Project Analysis
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Project Analysis
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../project/project-analysis/">
+<span class="md-ellipsis">
+    
+  
+    Project Analysis
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../project/enhancement-plan/">
+<span class="md-ellipsis">
+    
+  
+    Enhancement Plan
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Agentic AI Fundamentals
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_4_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Agentic AI Fundamentals
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../agentic-ai/fundamentals/">
+<span class="md-ellipsis">
+    
+  
+    What is Agentic AI?
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../agentic-ai/classification/">
+<span class="md-ellipsis">
+    
+  
+    LLM App vs Agent vs Workflow
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_5" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+<span class="md-ellipsis">
+    
+  
+    Components
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_5_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_5">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Components
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../agent-architecture/">
+<span class="md-ellipsis">
+    
+  
+    Agent Architecture
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../agent-loop/">
+<span class="md-ellipsis">
+    
+  
+    Agent Loop
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../diagrams/">
+<span class="md-ellipsis">
+    
+  
+    Component Diagrams
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../tool-calling/">
+<span class="md-ellipsis">
+    
+  
+    Tool Calling
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../planning/">
+<span class="md-ellipsis">
+    
+  
+    Planning &amp; Reasoning
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../memory/">
+<span class="md-ellipsis">
+    
+  
+    Memory
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+<span class="md-ellipsis">
+    
+  
+    State
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+<span class="md-ellipsis">
+    
+  
+    State
+  
+
+    
+  </span>
+</a>
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#why-state-matters">
+<span class="md-ellipsis">
+      
+        Why State Matters
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#state-machine-model">
+<span class="md-ellipsis">
+      
+        State Machine Model
+      
+    </span>
+</a>
+<nav aria-label="State Machine Model" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#states-explained">
+<span class="md-ellipsis">
+      
+        States explained
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#in-this-poc">
+<span class="md-ellipsis">
+      
+        In this POC
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#types-of-state">
+<span class="md-ellipsis">
+      
+        Types of State
+      
+    </span>
+</a>
+<nav aria-label="Types of State" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#agent-state_1">
+<span class="md-ellipsis">
+      
+        Agent state
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#task-state">
+<span class="md-ellipsis">
+      
+        Task state
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#tool-execution-state">
+<span class="md-ellipsis">
+      
+        Tool execution state
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#conversation-state">
+<span class="md-ellipsis">
+      
+        Conversation state
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#persistent-state">
+<span class="md-ellipsis">
+      
+        Persistent state
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#state-transitions">
+<span class="md-ellipsis">
+      
+        State Transitions
+      
+    </span>
+</a>
+<nav aria-label="State Transitions" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#state-transition-example">
+<span class="md-ellipsis">
+      
+        State transition example
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#in-this-poc_1">
+<span class="md-ellipsis">
+      
+        In this POC
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#long-running-agents">
+<span class="md-ellipsis">
+      
+        Long-Running Agents
+      
+    </span>
+</a>
+<nav aria-label="Long-Running Agents" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#checkpointing">
+<span class="md-ellipsis">
+      
+        Checkpointing
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#pausing-and-resuming">
+<span class="md-ellipsis">
+      
+        Pausing and resuming
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#concurrency">
+<span class="md-ellipsis">
+      
+        Concurrency
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#event-sourcing">
+<span class="md-ellipsis">
+      
+        Event sourcing
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#interview-questions">
+<span class="md-ellipsis">
+      
+        Interview Questions
+      
+    </span>
+</a>
+<nav aria-label="Interview Questions" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#follow-up-questions">
+<span class="md-ellipsis">
+      
+        Follow-up questions
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#common-mistakes">
+<span class="md-ellipsis">
+      
+        Common mistakes
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../rag-agents/">
+<span class="md-ellipsis">
+    
+  
+    RAG + Agents
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../multi-agent/">
+<span class="md-ellipsis">
+    
+  
+    Multi-Agent
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../orchestration/">
+<span class="md-ellipsis">
+    
+  
+    Orchestration
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../human-in-the-loop/">
+<span class="md-ellipsis">
+    
+  
+    Human-in-the-Loop
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../security/">
+<span class="md-ellipsis">
+    
+  
+    Guardrails &amp; Security
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../evaluation/">
+<span class="md-ellipsis">
+    
+  
+    Evaluation
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../observability/">
+<span class="md-ellipsis">
+    
+  
+    Observability
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_6" type="checkbox"/>
+<label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Experiments
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_6_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_6">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Experiments
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../experiments/agent-loop/">
+<span class="md-ellipsis">
+    
+  
+    Agent Loop
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../experiments/tool-selection/">
+<span class="md-ellipsis">
+    
+  
+    Tool Selection
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../experiments/planning-strategies/">
+<span class="md-ellipsis">
+    
+  
+    Planning Strategies
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../experiments/memory/">
+<span class="md-ellipsis">
+    
+  
+    Memory
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../experiments/rag-agent/">
+<span class="md-ellipsis">
+    
+  
+    RAG Agent
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../experiments/multi-agent/">
+<span class="md-ellipsis">
+    
+  
+    Multi-Agent
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../experiments/human-in-the-loop/">
+<span class="md-ellipsis">
+    
+  
+    Human-in-the-Loop
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../experiments/agent-evaluation/">
+<span class="md-ellipsis">
+    
+  
+    Agent Evaluation
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_7" type="checkbox"/>
+<label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Interview Preparation
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_7_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_7">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Interview Preparation
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../interview-preparation/beginner/">
+<span class="md-ellipsis">
+    
+  
+    Beginner
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../interview-preparation/intermediate/">
+<span class="md-ellipsis">
+    
+  
+    Intermediate
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../interview-preparation/advanced/">
+<span class="md-ellipsis">
+    
+  
+    Advanced
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../interview-preparation/system-design/">
+<span class="md-ellipsis">
+    
+  
+    System Design
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../interview-preparation/scenarios/">
+<span class="md-ellipsis">
+    
+  
+    Scenarios
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#why-state-matters">
+<span class="md-ellipsis">
+      
+        Why State Matters
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#state-machine-model">
+<span class="md-ellipsis">
+      
+        State Machine Model
+      
+    </span>
+</a>
+<nav aria-label="State Machine Model" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#states-explained">
+<span class="md-ellipsis">
+      
+        States explained
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#in-this-poc">
+<span class="md-ellipsis">
+      
+        In this POC
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#types-of-state">
+<span class="md-ellipsis">
+      
+        Types of State
+      
+    </span>
+</a>
+<nav aria-label="Types of State" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#agent-state_1">
+<span class="md-ellipsis">
+      
+        Agent state
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#task-state">
+<span class="md-ellipsis">
+      
+        Task state
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#tool-execution-state">
+<span class="md-ellipsis">
+      
+        Tool execution state
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#conversation-state">
+<span class="md-ellipsis">
+      
+        Conversation state
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#persistent-state">
+<span class="md-ellipsis">
+      
+        Persistent state
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#state-transitions">
+<span class="md-ellipsis">
+      
+        State Transitions
+      
+    </span>
+</a>
+<nav aria-label="State Transitions" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#state-transition-example">
+<span class="md-ellipsis">
+      
+        State transition example
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#in-this-poc_1">
+<span class="md-ellipsis">
+      
+        In this POC
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#long-running-agents">
+<span class="md-ellipsis">
+      
+        Long-Running Agents
+      
+    </span>
+</a>
+<nav aria-label="Long-Running Agents" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#checkpointing">
+<span class="md-ellipsis">
+      
+        Checkpointing
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#pausing-and-resuming">
+<span class="md-ellipsis">
+      
+        Pausing and resuming
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#concurrency">
+<span class="md-ellipsis">
+      
+        Concurrency
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#event-sourcing">
+<span class="md-ellipsis">
+      
+        Event sourcing
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#interview-questions">
+<span class="md-ellipsis">
+      
+        Interview Questions
+      
+    </span>
+</a>
+<nav aria-label="Interview Questions" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#follow-up-questions">
+<span class="md-ellipsis">
+      
+        Follow-up questions
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#common-mistakes">
+<span class="md-ellipsis">
+      
+        Common mistakes
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<h1 id="agent-state">Agent State<a class="headerlink" href="#agent-state" title="Permanent link">¶</a></h1>
+<blockquote>
+<p><strong>Goal:</strong> Understand why state matters in agents, the state machine
+model, and how state management becomes important in long-running agents.</p>
+</blockquote>
+<hr/>
+<h2 id="why-state-matters">Why State Matters<a class="headerlink" href="#why-state-matters" title="Permanent link">¶</a></h2>
+<p>State is the agent's <strong>memory of where it is</strong>. Without state, the agent
+can't:</p>
+<ul>
+<li>Know how many steps it has taken</li>
+<li>Track which tools have been called</li>
+<li>Decide when it's done</li>
+<li>Recover from failures</li>
+</ul>
+<p>State turns an agent from a stateless function into a <strong>stateful process</strong>.</p>
+<hr/>
+<h2 id="state-machine-model">State Machine Model<a class="headerlink" href="#state-machine-model" title="Permanent link">¶</a></h2>
+<p>The agent progresses through a series of discrete states:</p>
+<pre class="mermaid"><code>stateDiagram-v2
+    [*] --&gt; IDLE
+    IDLE --&gt; RUNNING: start
+    RUNNING --&gt; THINKING: begin iteration
+    THINKING --&gt; TOOL_CALLING: tools decided
+    THINKING --&gt; COMPLETED: final answer
+    TOOL_CALLING --&gt; OBSERVING: tools executed
+    OBSERVING --&gt; THINKING: next iteration
+    OBSERVING --&gt; THINKING: retry
+    THINKING --&gt; FAILED: error
+    RUNNING --&gt; MAX_ITERATIONS: cap reached
+    RUNNING --&gt; FAILED: unrecoverable error
+    MAX_ITERATIONS --&gt; TERMINATING: stop
+    COMPLETED --&gt; TERMINATING
+    FAILED --&gt; TERMINATING
+    TERMINATING --&gt; DONE
+</code></pre>
+<h3 id="states-explained">States explained<a class="headerlink" href="#states-explained" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>State</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>IDLE</strong></td>
+<td>Agent created, not yet running</td>
+</tr>
+<tr>
+<td><strong>RUNNING</strong></td>
+<td>Agent is processing a user request</td>
+</tr>
+<tr>
+<td><strong>THINKING</strong></td>
+<td>LLM is being called to decide the next action</td>
+</tr>
+<tr>
+<td><strong>TOOL_CALLING</strong></td>
+<td>The agent is executing tool(s)</td>
+</tr>
+<tr>
+<td><strong>OBSERVING</strong></td>
+<td>The agent is processing tool results</td>
+</tr>
+<tr>
+<td><strong>COMPLETED</strong></td>
+<td>The agent produced a final answer</td>
+</tr>
+<tr>
+<td><strong>FAILED</strong></td>
+<td>An unrecoverable error occurred</td>
+</tr>
+<tr>
+<td><strong>MAX_ITERATIONS</strong></td>
+<td>The iteration cap was reached</td>
+</tr>
+<tr>
+<td><strong>TERMINATING</strong></td>
+<td>The agent is cleaning up and shutting down</td>
+</tr>
+</tbody>
+</table>
+<h3 id="in-this-poc">In this POC<a class="headerlink" href="#in-this-poc" title="Permanent link">¶</a></h3>
+<p>The <code>AgentState</code> enum is defined in
+<code>app/agents/types.py</code> (app/agents/types.py) and the state machine
+logic is in <code>BaseAgent._transition_to()</code> in
+<code>app/agents/base.py</code> (app/agents/base.py).</p>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">AgentState</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+    <span class="n">IDLE</span> <span class="o">=</span> <span class="s2">"idle"</span>
+    <span class="n">RUNNING</span> <span class="o">=</span> <span class="s2">"running"</span>
+    <span class="n">THINKING</span> <span class="o">=</span> <span class="s2">"thinking"</span>
+    <span class="n">TOOL_CALLING</span> <span class="o">=</span> <span class="s2">"tool_calling"</span>
+    <span class="n">OBSERVING</span> <span class="o">=</span> <span class="s2">"observing"</span>
+    <span class="n">COMPLETED</span> <span class="o">=</span> <span class="s2">"completed"</span>
+    <span class="n">FAILED</span> <span class="o">=</span> <span class="s2">"failed"</span>
+    <span class="n">MAX_ITERATIONS</span> <span class="o">=</span> <span class="s2">"max_iterations"</span>
+    <span class="n">TERMINATING</span> <span class="o">=</span> <span class="s2">"terminating"</span>
+    <span class="n">DONE</span> <span class="o">=</span> <span class="s2">"done"</span>
+</code></pre></div>
+<hr/>
+<h2 id="types-of-state">Types of State<a class="headerlink" href="#types-of-state" title="Permanent link">¶</a></h2>
+<h3 id="agent-state_1">Agent state<a class="headerlink" href="#agent-state_1" title="Permanent link">¶</a></h3>
+<p>The agent's lifecycle state (the state machine above).</p>
+<h3 id="task-state">Task state<a class="headerlink" href="#task-state" title="Permanent link">¶</a></h3>
+<p>Information about the current task:
+- The original user request
+- Current sub-task
+- Tasks completed
+- Tasks pending</p>
+<h3 id="tool-execution-state">Tool execution state<a class="headerlink" href="#tool-execution-state" title="Permanent link">¶</a></h3>
+<p>Information about tool calls:
+- Which tools were called
+- Their arguments
+- Results
+- Success/failure status</p>
+<h3 id="conversation-state">Conversation state<a class="headerlink" href="#conversation-state" title="Permanent link">¶</a></h3>
+<p>The message history and memory state.</p>
+<h3 id="persistent-state">Persistent state<a class="headerlink" href="#persistent-state" title="Permanent link">¶</a></h3>
+<p>State that survives across sessions:
+- User preferences
+- Learned facts
+- Session summaries</p>
+<hr/>
+<h2 id="state-transitions">State Transitions<a class="headerlink" href="#state-transitions" title="Permanent link">¶</a></h2>
+<p>Every transition has a trigger and an effect:</p>
+<table>
+<thead>
+<tr>
+<th>From</th>
+<th>To</th>
+<th>Trigger</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IDLE</td>
+<td>RUNNING</td>
+<td><code>run()</code> called</td>
+<td>Initialize memory, reset counters</td>
+</tr>
+<tr>
+<td>RUNNING</td>
+<td>THINKING</td>
+<td>Iteration begins</td>
+<td>Log step, set timers</td>
+</tr>
+<tr>
+<td>THINKING</td>
+<td>TOOL_CALLING</td>
+<td>LLM returns tool call</td>
+<td>Validate + execute tools</td>
+</tr>
+<tr>
+<td>THINKING</td>
+<td>COMPLETED</td>
+<td>LLM returns text</td>
+<td>Set final answer</td>
+</tr>
+<tr>
+<td>TOOL_CALLING</td>
+<td>OBSERVING</td>
+<td>All tools done</td>
+<td>Process results</td>
+</tr>
+<tr>
+<td>OBSERVING</td>
+<td>THINKING</td>
+<td>Continue</td>
+<td>Check max iterations</td>
+</tr>
+<tr>
+<td>THINKING</td>
+<td>MAX_ITERATIONS</td>
+<td><code>iteration &gt;= max</code></td>
+<td>Log error, stop</td>
+</tr>
+<tr>
+<td>(any)</td>
+<td>FAILED</td>
+<td>Exception</td>
+<td>Log error, stop</td>
+</tr>
+<tr>
+<td>COMPLETED/MAX_ITERATIONS/FAILED</td>
+<td>TERMINATING</td>
+<td>Stop condition</td>
+<td>Cleanup</td>
+</tr>
+<tr>
+<td>TERMINATING</td>
+<td>DONE</td>
+<td>Cleanup done</td>
+<td>Return result</td>
+</tr>
+</tbody>
+</table>
+<h3 id="state-transition-example">State transition example<a class="headerlink" href="#state-transition-example" title="Permanent link">¶</a></h3>
+<div class="highlight"><pre><span></span><code>User: "What is 23 * 47 + 15?"
+
+1. IDLE → RUNNING           (agent.run called)
+2. RUNNING → THINKING        (first iteration)
+3. THINKING → TOOL_CALLING   (LLM says "call calculator")
+4. TOOL_CALLING → OBSERVING  (calculator returns 1096)
+5. OBSERVING → THINKING      (second iteration)
+6. THINKING → COMPLETED      (LLM says "the answer is 1096")
+7. COMPLETED → TERMINATING   (return result)
+8. TERMINATING → DONE        (cleanup)
+</code></pre></div>
+<h3 id="in-this-poc_1">In this POC<a class="headerlink" href="#in-this-poc_1" title="Permanent link">¶</a></h3>
+<p>State transitions are recorded in the <code>ExecutionTrace</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">_transition_to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">AgentState</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">old_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">state</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">trace</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trace</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">"state_change"</span><span class="p">,</span> <span class="n">old</span><span class="o">=</span><span class="n">old_state</span><span class="p">,</span> <span class="n">new</span><span class="o">=</span><span class="n">state</span><span class="p">)</span>
+</code></pre></div>
+<hr/>
+<h2 id="long-running-agents">Long-Running Agents<a class="headerlink" href="#long-running-agents" title="Permanent link">¶</a></h2>
+<p>In long-running agents (agents that run for minutes, hours, or days),
+state management is critical:</p>
+<h3 id="checkpointing">Checkpointing<a class="headerlink" href="#checkpointing" title="Permanent link">¶</a></h3>
+<p>Periodically save the agent's state to disk so it can be resumed after a
+crash. The state includes:
+- Conversation history
+- Working memory
+- Current task state
+- Trace</p>
+<h3 id="pausing-and-resuming">Pausing and resuming<a class="headerlink" href="#pausing-and-resuming" title="Permanent link">¶</a></h3>
+<p>The agent can be paused (e.g., for human approval) and resumed later. The
+state machine handles this: <code>RUNNING → PAUSED → RUNNING</code>.</p>
+<h3 id="concurrency">Concurrency<a class="headerlink" href="#concurrency" title="Permanent link">¶</a></h3>
+<p>Multiple agents or agent instances need isolated state to avoid
+interference. Each agent instance has its own memory and state.</p>
+<h3 id="event-sourcing">Event sourcing<a class="headerlink" href="#event-sourcing" title="Permanent link">¶</a></h3>
+<p>For production systems, all state transitions can be stored as an event
+log. This provides:
+- Full auditability
+- The ability to replay history
+- Debugging without reproduction</p>
+<hr/>
+<h2 id="interview-questions">Interview Questions<a class="headerlink" href="#interview-questions" title="Permanent link">¶</a></h2>
+<p><strong>Q: What is agent state?</strong>
+A: The agent's current condition in its lifecycle (e.g., thinking,
+tool-calling, completed) plus the data it retains (conversation history,
+task state, working memory). State lets the agent track progress and
+decide what to do next.</p>
+<p><strong>Q: Why is state important in agents?</strong>
+A: Without state, the agent can't track how many steps it has taken, which
+tools it has called, or whether it is done. State enables:
+- Iteration counting (max iterations guardrail)
+- Progress tracking (which tasks are complete)
+- Recovery (resuming after interruption)
+- Debugging (tracing what happened)</p>
+<p><strong>Q: How would you model an agent as a state machine?</strong>
+A: Define discrete states (idle, running, thinking, tool_calling,
+observing, completed, failed) and transitions triggered by events (LLM
+response, tool result, error, iteration cap). Each state has associated
+behavior.</p>
+<p><strong>Q: How do you handle state in long-running agents?</strong>
+A: Use checkpointing (periodic saves to disk), event sourcing (append-only
+log of all events), and state isolation (each agent instance has its own
+state). For distributed agents, use a shared state store like Redis or a
+database.</p>
+<p><strong>Q: What's the difference between agent state and task state?</strong>
+A: Agent state is the agent's lifecycle (running, thinking, etc.).
+Task state is the data about the current task (sub-tasks, progress,
+intermediate results). They are related but independent.</p>
+<h3 id="follow-up-questions">Follow-up questions<a class="headerlink" href="#follow-up-questions" title="Permanent link">¶</a></h3>
+<ul>
+<li>"How would you checkpoint and resume an agent?"</li>
+<li>"What's the difference between state and memory?"</li>
+<li>"How do you handle concurrent agent state?"</li>
+<li>"How do you serialize agent state for persistence?"</li>
+</ul>
+<h3 id="common-mistakes">Common mistakes<a class="headerlink" href="#common-mistakes" title="Permanent link">¶</a></h3>
+<ul>
+<li>Not tracking iteration count (infinite loops)</li>
+<li>Mixing state types (lifecycle vs. task vs. conversation)</li>
+<li>Not checkpointing long-running agents</li>
+<li>Sharing state across concurrent agent instances</li>
+<li>Losing state on errors</li>
+</ul>
+</article>
+</div>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+<button class="md-top md-icon" data-md-component="top" hidden="" type="button">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  Back to top
+</button>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "content.code.copy", "content.code.annotate", "content.tooltips", "search.highlight", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+<script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+<script type="module">import mermaid from "https://unpkg.com/mermaid@10.4.0/dist/mermaid.esm.min.mjs";
+window.mermaidConfig = {default: {
+    startOnLoad: false
+}};</script></body>
+</html>

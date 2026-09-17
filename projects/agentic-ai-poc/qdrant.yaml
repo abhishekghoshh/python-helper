@@ -1,0 +1,14 @@
+qdrant_storage:
+log_level: warning
+
+service:
+  max_request_size_mb: 256
+
+telemetry_disabled: true
+
+cluster:
+  enabled: false
+
+persistence:
+  disk_storage:
+    storage_path: /qdrant/storage
