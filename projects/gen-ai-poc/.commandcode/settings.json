@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Shell(poetry:*)",
+      "Shell()",
+      "Shell(grep:*)",
+      "Shell(sleep:*)",
+      "Shell(cat:*)"
+    ],
+    "deny": [],
+    "defaultMode": "default"
+  }
+}

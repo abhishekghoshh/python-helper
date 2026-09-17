@@ -1,0 +1,114 @@
+site_name: GenAI Learning Lab
+site_description: A hands-on POC for learning Generative AI concepts
+site_author: GenAI POC
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-night
+        title: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-sunny
+        title: Switch to light mode
+  font:
+    text: Roboto
+    code: Roboto Mono
+  icon:
+    repo: fontawesome/brands/github
+
+extra:
+  repo_url: https://github.com/genai-poc/genai-poc
+  repo_name: GenAI Learning Lab
+
+extra_css:
+  - assets/css/custom.css
+
+plugins:
+  - search
+  - mermaid2:
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - attr_list
+  - md_in_html
+  - footnotes
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          element: div
+          format: !!python/name:mermaid2.fence_mermaid_custom
+  - pymdownx.highlight
+
+nav:
+  - Home: index.md
+  - GenAI Fundamentals:
+      - What is Generative AI?: genai/fundamentals.md
+      - ML vs Deep Learning vs GenAI: genai/ml-vs-dl-vs-genai.md
+      - Large Language Models: genai/llms.md
+      - Training vs Inference: genai/training-inference.md
+      - Transformer Architecture: genai/transformers.md
+      - Pre-training, Fine-tuning, RLHF: genai/training-methods.md
+  - Prompt Engineering:
+      - What is a Prompt?: prompting/what-is-a-prompt.md
+      - Message Roles: prompting/message-roles.md
+      - Prompting Techniques: prompting/techniques.md
+      - Prompt Templates: prompting/templates.md
+      - Prompt Injection: prompting/injection.md
+      - Best Practices: prompting/best-practices.md
+  - LLM APIs:
+      - Communicating with LLMs: llm/apis.md
+      - Streaming & Parameters: llm/parameters.md
+      - Error Handling & Rate Limits: llm/error-handling.md
+      - Cost Considerations: llm/cost.md
+  - Embeddings:
+      - What are Embeddings?: embeddings/what-are-embeddings.md
+      - Distance Metrics: embeddings/distance-metrics.md
+      - Embedding Models: embeddings/models.md
+      - Python Examples: embeddings/python-examples.md
+  - Vector Databases:
+      - What is a Vector Database?: vector-databases/what-is-vdb.md
+      - Vector Indexing: vector-databases/indexing.md
+      - Approximate NN Search: vector-databases/ann-search.md
+      - Metadata & Filtering: vector-databases/metadata-filtering.md
+      - Hybrid Search: vector-databases/hybrid-search.md
+      - Database Comparison: vector-databases/comparison.md
+      - Using Qdrant: vector-databases/qdrant.md
+  - RAG:
+      - What is RAG?: rag/what-is-rag.md
+      - The Complete RAG Flow: rag/rag-flow.md
+      - Document Ingestion: rag/ingestion.md
+      - Chunking Strategies: rag/chunking.md
+      - Retrieval: rag/retrieval.md
+      - Context Construction: rag/context-construction.md
+      - Prompt Construction: rag/prompt-construction.md
+      - RAG Failure Modes: rag/failure-modes.md
+      - Improving RAG: rag/improving-rag.md
+  - Advanced Topics:
+      - Function Calling: advanced/function-calling.md
+      - Structured Outputs: advanced/structured-outputs.md
+      - Agents: advanced/agents.md
+      - Memory & History: advanced/memory.md
+      - Guardrails: advanced/guardrails.md
+      - Evaluation: advanced/evaluation.md
+      - Hallucination: advanced/hallucination.md
+      - Observability: advanced/observability.md
+      - LLM Security: advanced/security.md
+  - Architecture:
+      - High-Level Architecture: architecture/high-level.md
+      - Component Responsibilities: architecture/components.md
+      - Data Flow: architecture/data-flow.md
+      - API Documentation: architecture/api.md
+      - RAG Flow Diagram: architecture/rag-flow.md
+      - Embedding Flow: architecture/embedding-flow.md
+      - Vector DB Interaction: architecture/vector-db-interaction.md
+  - Guide: guide.md
+  - Experiments: experiments.md

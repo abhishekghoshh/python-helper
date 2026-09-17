@@ -1,0 +1,37 @@
+/* Custom styles for GenAI Learning Lab */
+
+.md-content code {
+    border-radius: 4px;
+}
+
+.md-content pre code {
+    border-radius: 8px;
+}
+
+.mermaid {
+    font-family: var(--md-text-font);
+    text-align: center;
+}
+
+.mermaid svg {
+    max-width: 100%;
+    height: auto;
+}
+
+.md-content h2 {
+    margin-top: 2rem;
+}
+
+.md-content h3 {
+    margin-top: 1.5rem;
+}
+
+/* Improve table readability */
+.md-content table {
+    font-size: 0.9rem;
+}
+
+.md-content td,
+.md-content th {
+    padding: 0.5rem 0.75rem;
+}

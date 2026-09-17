@@ -1,0 +1,18 @@
+- Prefers `zip(..., strict=True)` for explicit length-matching safety. Confidence: 0.9
+- Prefers Mermaid diagrams over ASCII text diagrams for documentation visualization. Confidence: 0.85
+- Prefers detailed diagrams with added context (subgraphs, node styling, descriptive labels) rather than minimal representations. Confidence: 0.75
+- Prefers `mkdocs build --strict` for documentation verification to catch warnings as errors. Confidence: 0.85
+- Prefers multi-line `logger.info(...)` calls when a single-line log statement would exceed line length limits. Confidence: 0.8
+- Prefers cleaning up stray empty directories at project root to keep the project structure tidy. Confidence: 0.7
+- Prefers chaining verification commands (`ruff check && echo ... && pytest && echo ... && mkdocs build --strict && echo ...`) with echo status markers for final checks. Confidence: 0.65
+- Prefers logging to be added across all modules (services, API endpoints, pipeline stages) with structured statements that include relevant context (token counts, model params, search scores, context stats). Confidence: 0.9
+- Prefers logging configuration driven by environment variables: `LOG_LEVEL`, `LOG_FORMAT` (supporting "standard" human-readable and "json" structured), and optional `LOG_FILE`. Confidence: 0.9
+- Prefers a `configure_logging()` function wired both at import time and in the FastAPI lifespan handler to ensure logging is initialized regardless of how the app starts. Confidence: 0.85
+- Prefers pinning Poetry version in Dockerfiles to match the lock file format generator for reproducible builds, and copying `poetry.lock` alongside `pyproject.toml` with layer-cached installs. Confidence: 0.8
+- Prefers isolating Docker build failures by running `docker build -f <Dockerfile> -t <tag> .` directly on the individual file (with `2>&1 | tail -N` to capture and truncate output) rather than going through `docker-compose up --build`, since direct builds surface the actual errors without docker-compose's aggregation layer obscuring them. Confidence: 0.65
+- Prefers minimal solutions — explicitly requests "minimal" implementations (e.g., minimal Streamlit app) rather than feature-heavy ones. Confidence: 0.8
+- Prefers REST API calls for frontend-backend communication (via `requests`) over in-process imports, keeping frontend and backend decoupled and independently deployable. Confidence: 0.7
+- Prefers lightweight Dockerfiles (e.g., `python:3.11-slim` + `pip install`) for frontend-only or minimal-dependency services instead of full Poetry-based images. Confidence: 0.7
+- Prefers graceful error handling in UI code: wrapping API calls in try/except and displaying user-friendly errors via `st.error()` rather than letting exceptions propagate. Confidence: 0.6
+- Prefers cleaning up build artifacts (`site/`, `__pycache__`/, `.pytest_cache`) after verification or build runs to keep the working tree clean. Confidence: 0.7
+- Prefers mock/fallback modes so the application works without paid API keys — configurable via `mock_llm_mode` with "auto"/"always"/"never" options, where "auto" uses mock when no API key is detected, enabling safe and free local operation. Confidence: 0.9
